@@ -1,0 +1,301 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#c53b2c">
+    <title>RedStar Travel | وكالة ريدستار للسفر والسياحة</title>
+    <link rel="icon" href="assets/images/favicon.ico">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body data-page="index">
+    <header class="site-header">
+        <div class="header-container">
+            <a class="logo" href="index.html" aria-label="RedStar Travel">
+                <img src="assets/images/logo.svg" alt="RedStar Travel">
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="active" data-i18n="nav_home">الرئيسية</a>
+                <a href="about.html" data-i18n="nav_about">من نحن</a>
+                <a href="services.html" data-i18n="nav_services">خدماتنا</a>
+                <a href="our-work.html" class="nav-cta" data-i18n="nav_our_work">أعمالنا</a>
+                <div class="lang-switcher">
+                    <button class="lang-btn" type="button" data-lang="en">EN</button>
+                    <button class="lang-btn" type="button" data-lang="ar">AR</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-shell">
+            <video class="hero-video" autoplay muted loop playsinline aria-hidden="true">
+                <source src="assets/videos/travel.mp4" type="video/mp4">
+            </video>
+            <div class="hero-content hero-grid">
+                <div class="hero-copy">
+                    <span class="eyebrow" data-i18n="hero_eyebrow">وكالة ريدستار للسياحة والسفر</span>
+                    <h1 data-i18n="hero_title">انطلق أبعد مع شريك سفر موثوق ومحترف.</h1>
+                    <p data-i18n="hero_text">حجوزات طيران، فنادق، وتأشيرات مصممة لتلبية احتياجات المسافرين بسرعة ومرونة عبر الشرق الأوسط، إفريقيا، والوجهات العالمية.</p>
+                    <div class="hero-actions">
+                        <a class="button button-primary" href="services.html" data-i18n="start_planning">ابدأ التخطيط</a>
+                        <a class="button button-secondary" href="https://wa.me/201555988432" target="_blank" data-i18n="speak_whatsapp">تحدث عبر واتساب</a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-card">
+                            <strong data-i18n="stat_flights_title">تذاكر الطيران</strong>
+                            <span data-i18n="stat_flights_text">حجوزات مباشرة وأفضل المسارات الإقليمية والدولية.</span>
+                        </div>
+                        <div class="stat-card">
+                            <strong data-i18n="stat_hotels_title">الفنادق</strong>
+                            <span data-i18n="stat_hotels_text">إقامات مختارة بعناية لرجال الأعمال والعائلات.</span>
+                        </div>
+                        <div class="stat-card">
+                            <strong data-i18n="stat_visas_title">التأشيرات</strong>
+                            <span data-i18n="stat_visas_text">موافقات أمنية وتأشيرات دخول سريعة وموثوقة.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="search-panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h2 data-i18n="quick_search_title">البحث السريع</h2>
+                            <p data-i18n="quick_search_text">احصل على أفضل الأسعار والتوافر خلال ثوانٍ.</p>
+                        </div>
+                        <div class="search-tabs">
+                            <button class="tab-btn active" type="button" onclick="openTab(event, 'flights')" data-i18n="tab_flights">الطيران</button>
+                            <button class="tab-btn" type="button" onclick="openTab(event, 'hotels')" data-i18n="tab_hotels">الفنادق</button>
+                        </div>
+                    </div>
+
+                    <!-- تبويب الطيران -->
+                    <div id="flights" class="tab-content active">
+                        <div class="trip-options">
+                            <label><input type="radio" name="trip-type" value="round-trip" checked onclick="toggleReturn(true)"> <span data-i18n="round_trip">ذهاب وعودة</span></label>
+                            <label><input type="radio" name="trip-type" value="one-way" onclick="toggleReturn(false)"> <span data-i18n="one_way">ذهاب فقط</span></label>
+                        </div>
+                        
+                        <div class="search-grid">
+                            <div class="input-box">
+                                <label for="flight-origin" data-i18n="origin_label">مدينة المغادرة</label>
+                                <input type="text" id="flight-origin" list="airport-suggestions" placeholder="بورتسودان (PZU) أو القاهرة (CAI)">
+                            </div>
+                            <div class="input-box">
+                                <label for="flight-dest" data-i18n="dest_label">وجهة الوصول</label>
+                                <input type="text" id="flight-dest" list="airport-suggestions" placeholder="جدة (JED) أو دبي (DXB)">
+                            </div>
+                            <div class="input-box">
+                                <label for="flight-departure" data-i18n="dep_date_label">تاريخ المغادرة</label>
+                                <input type="date" id="flight-departure">
+                            </div>
+                            <div class="input-box" id="return-box">
+                                <label for="flight-return" data-i18n="ret_date_label">تاريخ العودة</label>
+                                <input type="date" id="flight-return">
+                            </div>
+                            <div class="input-box">
+                                <label for="flight-cabin" data-i18n="cabin_label">الدرجة</label>
+                                <select id="flight-cabin">
+                                    <option value="Economy">اقتصادية (Economy)</option>
+                                    <option value="Premium Economy">اقتصادية ممتازة</option>
+                                    <option value="Business">رجال أعمال (Business)</option>
+                                    <option value="First">درجة أولى (First)</option>
+                                </select>
+                            </div>
+                            <div class="input-box">
+                                <label for="flight-currency" data-i18n="currency_label">العملة</label>
+                                <select id="flight-currency">
+                                    <option value="USD" selected>USD ($)</option>
+                                    <option value="SDG">SDG (جنيه سوداني)</option>
+                                    <option value="SAR">SAR (ريال سعودي)</option>
+                                    <option value="AED">AED (درهم إماراتي)</option>
+                                    <option value="EGP">EGP (جنيه مصري)</option>
+                                </select>
+                            </div>
+                            <div class="input-box">
+                                <label data-i18n="travelers_label">المسافرون</label>
+                                <div class="passenger-grid">
+                                    <div class="p-input"><small data-i18n="adults">بالغين</small><input type="number" id="adults" value="1" min="1"></div>
+                                    <div class="p-input"><small data-i18n="kids">أطفال</small><input type="number" id="kids" value="0" min="0"></div>
+                                    <div class="p-input"><small data-i18n="infants">رضع</small><input type="number" id="infants" value="0" min="0"></div>
+                                </div>
+                            </div>
+                            <button class="button button-primary search-submit" type="button" onclick="searchFlights()" data-i18n="search_flights_btn">طلب حجز الطيران عبر واتساب</button>
+                        </div>
+                        <datalist id="airport-suggestions">
+                            <option value="Port Sudan (PZU)"></option>
+                            <option value="Khartoum (KRT)"></option>
+                            <option value="Dongola (DOG)"></option>
+                            <option value="Kassala (KSL)"></option>
+                            <option value="El Obeid (EBD)"></option>
+                            <option value="Cairo (CAI)"></option>
+                            <option value="Alexandria (HBE)"></option>
+                            <option value="Hurghada (HRG)"></option>
+                            <option value="Sharm El Sheikh (SSH)"></option>
+                            <option value="Luxor (LXR)"></option>
+                            <option value="Jeddah (JED)"></option>
+                            <option value="Riyadh (RUH)"></option>
+                            <option value="Madinah (MED)"></option>
+                            <option value="Dammam (DMM)"></option>
+                            <option value="Abha (AHB)"></option>
+                            <option value="Dubai (DXB)"></option>
+                            <option value="Abu Dhabi (AUH)"></option>
+                            <option value="Sharjah (SHJ)"></option>
+                            <option value="Muscat (MCT)"></option>
+                            <option value="Salalah (SLL)"></option>
+                            <option value="Doha (DOH)"></option>
+                            <option value="Istanbul (IST)"></option>
+                            <option value="Istanbul Sabiha (SAW)"></option>
+                            <option value="Entebbe / Kampala (EBB)"></option>
+                            <option value="Nairobi (NBO)"></option>
+                            <option value="Addis Ababa (ADD)"></option>
+                            <option value="Kigali (KGL)"></option>
+                            <option value="Dar es Salaam (DAR)"></option>
+                            <option value="Zanzibar (ZNZ)"></option>
+                            <option value="Kilimanjaro (JRO)"></option>
+                            <option value="Yaounde (NSI)"></option>
+                            <option value="Douala (DLA)"></option>
+                            <option value="Juba (JUB)"></option>
+                            <option value="Beijing (PEK)"></option>
+                            <option value="Shanghai (PVG)"></option>
+                            <option value="Guangzhou (CAN)"></option>
+                            <option value="New Delhi (DEL)"></option>
+                            <option value="Mumbai (BOM)"></option>
+                            <option value="Bengaluru (BLR)"></option>
+                            <option value="Chennai (MAA)"></option>
+                        </datalist>
+                    </div>
+
+                    <!-- تبويب الفنادق -->
+                    <div id="hotels" class="tab-content">
+                        <div class="search-grid">
+                            <div class="input-box">
+                                <label for="hotel-dest" data-i18n="hotel_dest_label">المدينة أو الفندق</label>
+                                <input type="text" id="hotel-dest" placeholder="مثال: دبي، القاهرة، الرياض، مسقط">
+                            </div>
+                            <div class="input-box">
+                                <label for="hotel-checkin" data-i18n="checkin_label">تاريخ الدخول</label>
+                                <input type="date" id="hotel-checkin">
+                            </div>
+                            <div class="input-box">
+                                <label for="hotel-checkout" data-i18n="checkout_label">تاريخ الخروج</label>
+                                <input type="date" id="hotel-checkout">
+                            </div>
+                            <div class="input-box">
+                                <label data-i18n="rooms_guests_label">الغرف والنزلاء</label>
+                                <div class="passenger-grid">
+                                    <div class="p-input"><small data-i18n="rooms">الغرف</small><input type="number" id="rooms" value="1" min="1"></div>
+                                    <div class="p-input"><small data-i18n="guests">البالغين</small><input type="number" id="guests" value="2" min="1"></div>
+                                    <div class="p-input"><small data-i18n="kids_label">الأطفال</small><input type="number" id="hotel-kids" value="0" min="0"></div>
+                                </div>
+                            </div>
+                            <button class="button button-primary search-submit" type="button" onclick="searchHotels()" data-i18n="search_hotels_btn">طلب حجز الفندق عبر واتساب</button>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- قسم الوجهات -->
+        <section class="section">
+            <div class="container">
+                <div class="section-head">
+                    <div>
+                        <span class="kicker" data-i18n="featured_kicker">أبرز الوجهات</span>
+                        <h2 data-i18n="featured_title">الوجهات الأكثر طلباً لدى مسافرينا</h2>
+                    </div>
+                    <p data-i18n="featured_text">خطوط طيران مباشرة وإقامات مريحة لأهم الوجهات الإقليمية والدولية.</p>
+                </div>
+                <div class="dest-grid">
+                    <article class="dest-card">
+                        <img src="assets/images/dest-dubai.webp" data-slideshow-folder="dubai" data-slideshow-count="5" alt="Dubai">
+                        <div class="dest-info">
+                            <h3 data-i18n="destination_dubai_title">دبي والإمارات</h3>
+                            <p data-i18n="destination_dubai_text">عروض طيران مميزة وإقامات فاخرة للأعمال والعطلات العائلية.</p>
+                        </div>
+                    </article>
+                    <article class="dest-card">
+                        <img src="assets/images/dest-saudi.webp" data-slideshow-folder="saudi" data-slideshow-count="8" alt="Saudi Arabia">
+                        <div class="dest-info">
+                            <h3 data-i18n="destination_saudi_title">المملكة العربية السعودية</h3>
+                            <p data-i18n="destination_saudi_text">رحلات ميسرة للزيارات والعمرة، وحجوزات طيران لكافة مدن المملكة.</p>
+                        </div>
+                    </article>
+                    <article class="dest-card">
+                        <img src="assets/images/dest-egypt.webp" data-slideshow-folder="egypt" data-slideshow-count="6" alt="Egypt">
+                        <div class="dest-info">
+                            <h3 data-i18n="destination_egypt_title">جمهورية مصر العربية</h3>
+                            <p data-i18n="destination_egypt_text">تسهيلات دخول وموافقات أمنية سريعة وحجوزات طيران يومية.</p>
+                        </div>
+                    </article>
+                    <article class="dest-card">
+                        <img src="assets/images/dest-istanbul.webp" data-slideshow-folder="istanbul" data-slideshow-count="6" alt="Istanbul and Turkey">
+                        <div class="dest-info">
+                            <h3 data-i18n="destination_turkey_title">تأشيرات تركيا قريبًا</h3>
+                            <p data-i18n="destination_turkey_text">خدمة التأشيرات التركية ستتوفر قريبًا.</p>
+                        </div>
+                    </article>
+                    <article class="dest-card">
+                        <img src="assets/images/destinations/Qatar/image1.webp" data-slideshow-folder="Qatar" data-slideshow-count="9" alt="Qatar visa for Gulf residents">
+                        <div class="dest-info">
+                            <h3 data-i18n="destination_qatar_title">تأشيرة قطر لمقيمي الخليج</h3>
+                            <p data-i18n="destination_qatar_text">إرشاد ومساعدة في متطلبات تأشيرة قطر لمقيمي الخليج.</p>
+                        </div>
+                    </article>
+                    <article class="dest-card">
+                        <img src="assets/images/destinations/China/image1.webp" data-slideshow-folder="China" data-slideshow-count="8" alt="China visa for Gulf residents">
+                        <div class="dest-info">
+                            <h3 data-i18n="destination_china_title">تأشيرة الصين لمقيمي الخليج</h3>
+                            <p data-i18n="destination_china_text">تجهيز ومتابعة طلب تأشيرة الصين للمقيمين في الخليج.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section site-feedback-section">
+            <div class="container feedback-layout">
+                <div>
+                    <span class="kicker" data-i18n="feedback_kicker">آراء الزوار</span>
+                    <h2 data-i18n="feedback_title">شاركنا رأيك في تجربتك</h2>
+                    <p><span data-i18n="visitor_count_label">عدد زيارات الموقع حتى الآن:</span> <strong id="visitor-count">...</strong></p>
+                </div>
+                <form class="feedback-form" id="review-form">
+                    <input id="review-name" type="text" maxlength="60" placeholder="الاسم" data-i18n-placeholder="review_name_placeholder">
+                    <select id="review-rating" aria-label="Rating">
+                        <option value="5">★★★★★ 5</option>
+                        <option value="4">★★★★ 4</option>
+                        <option value="3">★★★ 3</option>
+                        <option value="2">★★ 2</option>
+                        <option value="1">★ 1</option>
+                    </select>
+                    <textarea id="review-comment" rows="3" maxlength="500" required placeholder="اكتب رأيك" data-i18n-placeholder="review_comment_placeholder"></textarea>
+                    <button class="button button-primary" type="submit" data-i18n="submit_review">إرسال التقييم</button>
+                    <p id="review-status" role="status"></p>
+                </form>
+            </div>
+            <div class="container reviews-list" id="reviews-list"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <p>© <span data-current-year></span> <span data-i18n="footer_copy">وكالة ريدستار للسفر والسياحة. رحلات مدروسة بثقة.</span></p>
+            <div class="footer-links">
+                <a href="about.html" data-i18n="nav_about">من نحن</a>
+                <a href="services.html" data-i18n="nav_services">خدماتنا</a>
+                <a href="contact.html" data-i18n="nav_contact">تواصل معنا</a>
+                <a href="privacy.html" data-i18n="footer_privacy">سياسة الخصوصية</a>
+                <a href="terms.html" data-i18n="footer_terms">الشروط والأحكام</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

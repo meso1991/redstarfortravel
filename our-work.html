@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#c53b2c">
+    <title>أعمالنا | RedStar Travel</title>
+    <link rel="icon" href="assets/images/favicon.ico">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Manrope:wght@400;500;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body data-page="our-work">
+    <header class="site-header">
+        <div class="header-container">
+            <a class="logo" href="index.html" aria-label="RedStar Travel home"><img src="assets/images/logo.svg" alt="RedStar Travel"></a>
+            <nav class="nav-links">
+                <a href="index.html" data-i18n="nav_home">الرئيسية</a>
+                <a href="about.html" data-i18n="nav_about">من نحن</a>
+                <a href="services.html" data-i18n="nav_services">خدماتنا</a>
+                <a href="our-work.html" class="nav-cta active" data-i18n="nav_our_work">أعمالنا</a>
+                <div class="lang-switcher"><button class="lang-btn" type="button" data-lang="en">EN</button><button class="lang-btn" type="button" data-lang="ar">AR</button></div>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="page-hero" style="--page-hero-image: url('assets/images/hero-bg.webp');">
+            <div class="page-hero-content">
+                <span class="eyebrow" data-i18n="work_hero_eyebrow">أعمالنا</span>
+                <h1 data-i18n="work_hero_title">نماذج من أعمال ريدستار</h1>
+                <p data-i18n="work_hero_text">شاهد نماذج من خدماتنا ونتائج أعمالنا في مكان واحد.</p>
+            </div>
+        </section>
+        <section class="section">
+            <div class="container section-stack">
+                <div class="section-head">
+                    <div>
+                        <span class="kicker" data-i18n="work_gallery_kicker">معرض الأعمال</span>
+                        <h2 data-i18n="work_gallery_title">أعمالنا وخدماتنا</h2>
+                    </div>
+                    <p data-i18n="work_gallery_text">يتم تحديث هذا المعرض باستمرار بأحدث نماذج العمل.</p>
+                </div>
+                <div class="work-gallery" id="work-gallery"></div>
+            </div>
+        </section>
+    </main>
+    <div id="gallery-lightbox" class="gallery-lightbox" aria-hidden="true">
+        <button type="button" class="lightbox-close" aria-label="إغلاق الصورة">×</button>
+        <div class="lightbox-content">
+            <img id="lightbox-image" src="" alt="">
+            <p id="lightbox-caption"></p>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="footer-inner">
+            <p>© <span data-current-year></span> <span data-i18n="footer_copy">وكالة ريدستار للسفر والسياحة. رحلات مدروسة بثقة.</span></p>
+            <div class="footer-links"><a href="contact.html" data-i18n="nav_contact">تواصل معنا</a><a href="services.html" data-i18n="nav_services">خدماتنا</a></div>
+        </div>
+    </footer>
+    <script src="js/main.js"></script>
+    <script>
+        const galleryLightbox = document.getElementById("gallery-lightbox");
+        const lightboxImage = document.getElementById("lightbox-image");
+        const lightboxCaption = document.getElementById("lightbox-caption");
+
+        const openLightbox = (src, caption) => {
+            lightboxImage.src = src;
+            lightboxImage.alt = caption || "Work image";
+            lightboxCaption.textContent = caption || "";
+            galleryLightbox.classList.add("is-open");
+            galleryLightbox.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+        };
+
+        const closeLightbox = () => {
+            galleryLightbox.classList.remove("is-open");
+            galleryLightbox.setAttribute("aria-hidden", "true");
+            document.body.style.overflow = "";
+        };
+
+        fetch("assets/images/our-work/gallery.json")
+            .then((response) => response.json())
+            .then((gallery) => {
+                const container = document.getElementById("work-gallery");
+                const images = gallery.images || [];
+                container.innerHTML = images.length
+                    ? images.map((image) => `
+                        <figure class="gallery-figure" tabindex="0" role="button" aria-label="فتح الصورة ${image.caption || 'لأعمالنا'}" data-src="assets/images/our-work/${image.src}" data-caption="${image.caption || ''}">
+                            <img src="assets/images/our-work/${image.src}" alt="${image.alt || image.caption || ''}">
+                            <figcaption>${image.caption || ''}</figcaption>
+                        </figure>
+                    `).join("")
+                    : `<p class="work-empty" data-i18n="work_empty">سيتم إضافة نماذج الأعمال قريبًا.</p>`;
+
+                container.addEventListener("click", (event) => {
+                    const figure = event.target.closest(".gallery-figure");
+                    if (!figure) return;
+                    openLightbox(figure.dataset.src, figure.dataset.caption);
+                });
+
+                container.addEventListener("keydown", (event) => {
+                    const figure = event.target.closest(".gallery-figure");
+                    if (!figure) return;
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        openLightbox(figure.dataset.src, figure.dataset.caption);
+                    }
+                });
+            })
+            .catch(() => {
+                document.getElementById("work-gallery").innerHTML = `<p class="work-empty">Gallery is not available right now.</p>`;
+            });
+
+        galleryLightbox.addEventListener("click", (event) => {
+            if (event.target === galleryLightbox || event.target.closest(".lightbox-close")) {
+                closeLightbox();
+            }
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && galleryLightbox.classList.contains("is-open")) {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+</html>

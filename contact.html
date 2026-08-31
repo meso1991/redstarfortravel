@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#c53b2c">
+    <title>تواصل معنا | RedStar Travel</title>
+    <link rel="icon" href="assets/images/favicon.ico">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Manrope:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body data-page="contact">
+    <header class="site-header">
+        <div class="header-container">
+            <a class="logo" href="index.html" aria-label="RedStar Travel">
+                <img src="assets/images/logo.svg" alt="RedStar Travel">
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" data-i18n="nav_home">الرئيسية</a>
+                <a href="about.html" data-i18n="nav_about">من نحن</a>
+                <a href="services.html" data-i18n="nav_services">خدماتنا</a>
+                <a href="our-work.html" class="nav-cta" data-i18n="nav_our_work">أعمالنا</a>
+                <div class="lang-switcher">
+                    <button class="lang-btn" type="button" data-lang="en">EN</button>
+                    <button class="lang-btn" type="button" data-lang="ar">AR</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="contact-page container section">
+        <div class="section-head">
+            <div>
+                <span class="kicker" data-i18n="contact_kicker">تواصل معنا</span>
+                <h2 data-i18n="contact_title">دعنا نخطط لرحلتك القادمة</h2>
+            </div>
+            <p data-i18n="contact_text">املأ النموذج وسيتواصل معك موظف الحجوزات فوراً عبر الواتساب.</p>
+        </div>
+
+        <form class="contact-form" style="max-width: 680px; margin: 0 auto; background: #ffffff; padding: 35px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);" onsubmit="handleContactForm(event)">
+            <div class="search-grid" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="input-box">
+                    <label for="contact-name" data-i18n="contact_name">الاسم بالكامل</label>
+                    <input type="text" id="contact-name" placeholder="اكتب اسمك الكريم" data-i18n-placeholder="contact_name_placeholder" required>
+                </div>
+                <div class="input-box">
+                    <label for="contact-phone" data-i18n="contact_phone">رقم الهاتف / الواتساب</label>
+                    <input type="tel" id="contact-phone" placeholder="مثال: 01555988432" data-i18n-placeholder="contact_phone_placeholder" required>
+                </div>
+            </div>
+
+            <div class="input-box" style="margin-top: 20px;">
+                <label for="contact-service" data-i18n="contact_service">الخدمة المطلوبة</label>
+                <select id="contact-service">
+                    <option value="حجز طيران (بدر / تاركو / خطوط دولية)" data-i18n="opt_flight">حجز طيران (بدر / تاركو / خطوط دولية)</option>
+                    <option value="الموافقة الأمنية لدخول مصر" data-i18n="opt_egypt_security">الموافقة الأمنية لدخول مصر</option>
+                    <option value="تأشيرات السعودية (عمرة / زيارة / سياحة)" data-i18n="opt_saudi_visa">تأشيرات السعودية (عمرة / زيارة / سياحة)</option>
+                    <option value="تأشيرة سلطنة عمان" data-i18n="opt_oman_visa">تأشيرة سلطنة عمان</option>
+                    <option value="تأشيرات إفريقيا (كينيا / أوغندا / إثيوبيا / رواندا / جوبا)" data-i18n="opt_africa_visa">تأشيرات إفريقيا (كينيا / أوغندا / إثيوبيا / رواندا / جوبا)</option>
+                    <option value="تأشيرة الهند العلاجية ومرافق مريض" data-i18n="opt_india_visa">تأشيرة الهند العلاجية ومرافق مريض</option>
+                    <option value="حجوزات الفنادق والشقق الفندقية" data-i18n="opt_hotel">حجوزات الفنادق والشقق الفندقية</option>
+                    <option value="استفسار عام" data-i18n="opt_general">استفسار عام</option>
+                </select>
+            </div>
+
+            <div class="input-box" style="margin-top: 20px;">
+                <label for="contact-message" data-i18n="contact_msg">تفاصيل الطلب أو مسار الرحلة</label>
+                <textarea id="contact-message" rows="4" style="width: 100%; border-radius: 8px; padding: 12px; border: 1px solid #cbd5e1; font-family: inherit;" placeholder="اكتب خط السير، التواريخ المقترحة، أو أي ملاحظات إضافية..." data-i18n-placeholder="contact_msg_placeholder"></textarea>
+            </div>
+
+            <button class="button button-primary" type="submit" style="margin-top: 25px; width: 100%; font-size: 16px; padding: 14px;" data-i18n="contact_submit">إرسال الطلب عبر واتساب</button>
+        </form>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <p>© <span data-current-year></span> <span data-i18n="footer_copy">وكالة ريدستار للسفر والسياحة. رحلات مدروسة بثقة.</span></p>
+            <div class="footer-links">
+                <a href="about.html" data-i18n="nav_about">من نحن</a>
+                <a href="services.html" data-i18n="nav_services">خدماتنا</a>
+                <a href="contact.html" data-i18n="nav_contact">تواصل معنا</a>
+                <a href="privacy.html" data-i18n="footer_privacy">سياسة الخصوصية</a>
+                <a href="terms.html" data-i18n="footer_terms">الشروط والأحكام</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

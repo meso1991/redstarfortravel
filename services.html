@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#c53b2c">
+    <title>خدماتنا | RedStar Travel</title>
+    <link rel="icon" href="assets/images/favicon.ico">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Manrope:wght@400;500;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body data-page="services">
+    <header class="site-header">
+        <div class="header-container">
+            <a class="logo" href="index.html" aria-label="RedStar Travel">
+                <img src="assets/images/logo.svg" alt="RedStar Travel">
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" data-i18n="nav_home">الرئيسية</a>
+                <a href="about.html" data-i18n="nav_about">من نحن</a>
+                <a href="services.html" class="active" data-i18n="nav_services">خدماتنا</a>
+                <a href="our-work.html" class="nav-cta" data-i18n="nav_our_work">أعمالنا</a>
+                <div class="lang-switcher">
+                    <button class="lang-btn" type="button" data-lang="en">EN</button>
+                    <button class="lang-btn" type="button" data-lang="ar">AR</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="services-page container section">
+        <div class="section-head">
+            <div>
+                <span class="kicker" data-i18n="services_kicker">خدمات التأشيرات والسياحة</span>
+                <h2 data-i18n="services_title">حلول السفر الشاملة والتأشيرات المعتمدة</h2>
+            </div>
+            <p data-i18n="services_text">إنجاز سريع وموثوق لكافة أنواع التأشيرات، الموافقات الأمنية، وتذاكر الطيران المباشرة.</p>
+        </div>
+
+        <h3 class="work-section-title" data-i18n="our_work_title">أعمالنا</h3>
+
+        <!-- قسم خيارات السعودية -->
+        <h3 style="margin: 30px 0 15px; color: #c53b2c; font-size: 22px;"><i class="fa-solid fa-kaaba"></i> <span data-i18n="saudi_section_title">تأشيرات المملكة العربية السعودية</span></h3>
+        <div class="dest-grid">
+            <article class="dest-card">
+                <img src="assets/images/dest-saudi.webp" data-slideshow-folder="saudi" data-slideshow-count="8" data-slideshow-start="1" alt="تأشيرة سياحة وعمرة">
+                <div class="dest-info">
+                    <h3 data-i18n="svc_tourism_title">تأشيرة السياحة والعمرة</h3>
+                    <p data-i18n="svc_tourism_text">إصدار تأشيرات الدخول السياحية والعمرة الإلكترونية المتعددة والمفردة مع توفير التأمين الطبي المعتمد.</p>
+                    <button class="button button-primary" style="margin-top: 10px;" type="button" onclick="sendServiceBooking('تأشيرة سياحة / عمرة للسعودية')" data-i18n="svc_tourism_btn">طلب التأشيرة</button>
+                </div>
+            </article>
+
+            <article class="dest-card">
+                <img src="assets/images/dest-saudi.webp" data-slideshow-folder="saudi" data-slideshow-count="8" data-slideshow-start="3" alt="زيارة عائلية وتجارية">
+                <div class="dest-info">
+                    <h3 data-i18n="svc_family_title">الزيارات العائلية والشخصية والتجارية</h3>
+                    <p data-i18n="svc_family_text">متابعة مستندات التأشيرة وإجراءات منصة إنجاز، حجوزات مواعيد تساهيل، وتوثيق الطلبات الرسمية.</p>
+                    <button class="button button-primary" style="margin-top: 10px;" type="button" onclick="sendServiceBooking('تأشيرة زيارة عائلية / تجارية للسعودية')" data-i18n="svc_family_btn">طلب التأشيرة</button>
+                </div>
+            </article>
+
+            <article class="dest-card">
+                <img src="assets/images/dest-saudi.webp" data-slideshow-folder="saudi" data-slideshow-count="8" data-slideshow-start="5" alt="تأشيرات العمل والاستقدام">
+                <div class="dest-info">
+                    <h3 data-i18n="svc_work_title">تأشيرات العمل وإكمال الإجراءات</h3>
+                    <p data-i18n="svc_work_text">إنجاز متطلبات تفويض التأشيرات والتصديقات والربط الإلكتروني للجوازات بيسر واحترافية.</p>
+                    <button class="button button-primary" style="margin-top: 10px;" type="button" onclick="sendServiceBooking('تأشيرة عمل واستقدام للسعودية')" data-i18n="svc_work_btn">استفسار ومتابعة</button>
+                </div>
+            </article>
+        </div>
+
+        <!-- قسم تأشيرات إفريقيا والموافقات -->
+        <h3 style="margin: 40px 0 15px; color: #c53b2c; font-size: 22px;"><i class="fa-solid fa-earth-africa"></i> <span data-i18n="africa_section_title">تأشيرات الدول الإفريقية والموافقات</span></h3>
+        <div class="dest-grid">
+            <article class="dest-card">
+                <img src="assets/images/destinations/egypt/image1.webp" data-slideshow-folder="egypt" data-slideshow-count="6" alt="الموافقة الأمنية لمصر">
+                <div class="dest-info">
+                    <h3 data-i18n="svc_egypt_title">الموافقة الأمنية وتأشيرات مصر</h3>
+                    <p data-i18n="svc_egypt_text">استخراج الموافقات الأمنية السريعة للأفراد والعائلات مع خدمات الاستقبال من المطار والإقامة.</p>
+                    <button class="button button-primary" style="margin-top: 10px;" type="button" onclick="sendServiceBooking('الموافقة الأمنية لدخول مصر')" data-i18n="svc_egypt_btn">طلب الموافقة</button>
+                </div>
+            </article>
+
+            <article class="dest-card">
+                <img src="assets/images/destinations/Kenya/image1.webp" data-slideshow-folder="Kenya" data-slideshow-count="7" alt="تأشيرة كينيا">
+                <div class="dest-info">
+                    <h3 data-i18n="kenya_country">كينيا</h3>
+                    <p data-i18n="svc_kenya_text">إصدار تصريح السفر الإلكتروني (eTA) ومتابعة متطلبات السفر.</p>
+                    <button class="button button-primary" style="margin-top: 10px;" type="button" onclick="sendServiceBooking('تأشيرة كينيا')" data-i18n="request_visa">طلب التأشيرة</button>
+                </div>
+            </article>
+
+            <article class="dest-card">
+                <img src="assets/images/destinations/Uganda/image1.webp" data-slideshow-folder="Uganda" data-slideshow-count="8" alt="تأشيرة أوغندا">
+                <div class="dest-info">
+                    <h3 data-i18n="uganda_country">أوغندا</h3>
+                    <p data-i18n="svc_uganda_text">تأشيرة إلكترونية سريعة وتجهيز متطلبات السفر.</p>
+                    <button class="button button-primary" style="margin-top: 10px;" type="button" onclick="sendServiceBooking('تأشيرة أوغندا')" data-i18n="request_visa">طلب التأشيرة</button>
+                </div>
+            </article>
+
+            <article class="dest-card">
+                <img src="assets/images/destinations/Ethiopia/image1.webp" data-slideshow-folder="Ethiopia" data-slideshow-count="9" alt="تأشيرة إثيوبيا">
+                <div class="dest-info">
+                    <h3 data-i18n="ethiopia_country">إثيوبيا</h3>
+                    <p data-i18n="svc_ethiopia_text">تقديم طلب التأشيرة الإلكترونية ومراجعة المستندات.</p>
+                    <button class="button button-primary" style="margin-top: 10px;" type="button" onclick="sendServiceBooking('تأشيرة إثيوبيا')" data-i18n="request_visa">طلب التأشيرة</button>
+                </div>
+            </article>
+
+            <article class="dest-card">
+                <img src="assets/images/destinations/Tanzania/image1.webp" data-slideshow-folder="Tanzania" data-slideshow-count="8" alt="تأشيرة تنزانيا">
+                <div class="dest-info">
+                    <h3 data-i18n="tanzania_country">تنزانيا</h3>
+                    <p data-i18n="svc_tanzania_text">مساعدة في طلب التأشيرة وترتيب مستندات السفر.</p>
+                    <button class="button button-primary" style="margin-top: 10px;" type="button" onclick="sendServiceBooking('تأشيرة تنزانيا')" data-i18n="request_visa">طلب التأشيرة</button>
+                </div>
+            </article>
+
+            <article class="dest-card">
+                <img src="assets/images/destinations/Rwanda/image1.webp" data-slideshow-folder="Rwanda" data-slideshow-count="8" alt="تأشيرة رواندا">
+                <div class="dest-info">
+                    <h3 data-i18n="rwanda_country">رواندا</h3>
+                    <p data-i18n="svc_rwanda_text">إجراءات التأشيرة الإلكترونية ومتابعة الطلب.</p>
+                    <button class="button button-primary" style="margin-top: 10px;" type="button" onclick="sendServiceBooking('تأشيرة رواندا')" data-i18n="request_visa">طلب التأشيرة</button>
+                </div>
+            </article>
+
+            <article class="dest-card">
+                <img src="assets/images/destinations/Cameroon/image1.webp" data-slideshow-folder="Cameroon" data-slideshow-count="9" alt="تأشيرة الكاميرون">
+                <div class="dest-info">
+                    <h3 data-i18n="cameroon_country">الكاميرون</h3>
+                    <p data-i18n="svc_cameroon_text">تجهيز طلب التأشيرة وتأكيد المتطلبات قبل السفر.</p>
+                    <button class="button button-primary" style="margin-top: 10px;" type="button" onclick="sendServiceBooking('تأشيرة الكاميرون')" data-i18n="request_visa">طلب التأشيرة</button>
+                </div>
+            </article>
+
+            <article class="dest-card">
+                <img src="assets/images/destinations/Zanzibar/image1.webp" data-slideshow-folder="Zanzibar" data-slideshow-count="8" alt="تأشيرة زنجبار">
+                <div class="dest-info">
+                    <h3 data-i18n="zanzibar_country">زنجبار</h3>
+                    <p data-i18n="svc_zanzibar_text">مساعدة في متطلبات دخول زنجبار وتجهيز الطلب.</p>
+                    <button class="button button-primary" style="margin-top: 10px;" type="button" onclick="sendServiceBooking('تأشيرة زنجبار')" data-i18n="request_visa">طلب التأشيرة</button>
+                </div>
+            </article>
+        </div>
+
+        <h3 style="margin: 40px 0 15px; color: #c53b2c; font-size: 22px;"><i class="fa-solid fa-passport"></i> <span data-i18n="asia_gulf_section_title">تأشيرات آسيا ومقيمي الخليج</span></h3>
+        <div class="dest-grid">
+            <article class="dest-card">
+                <img src="assets/images/destinations/China/image1.webp" data-slideshow-folder="China" data-slideshow-count="8" alt="تأشيرة الصين لمقيمي الخليج">
+                <div class="dest-info">
+                    <h3 data-i18n="svc_china_title">تأشيرة الصين لمقيمي الخليج</h3>
+                    <p data-i18n="svc_china_text">مساعدة في تجهيز طلب تأشيرة الصين للمقيمين في دول الخليج.</p>
+                    <button class="button button-primary" style="margin-top: 10px;" type="button" onclick="sendServiceBooking('تأشيرة الصين لمقيمي الخليج')" data-i18n="request_visa">طلب التأشيرة</button>
+                </div>
+            </article>
+            <article class="dest-card">
+                <img src="assets/images/destinations/India/image1.webp" data-slideshow-folder="India" data-slideshow-count="10" alt="تأشيرة الهند العلاجية لمقيمي مصر">
+                <div class="dest-info">
+                    <h3 data-i18n="svc_india_title">تأشيرة الهند العلاجية لمقيمي مصر</h3>
+                    <p data-i18n="svc_india_text">تتوفر التأشيرة لحاملي الإقامات المصرية: إقامة مفوضية أو إقامة سياحية أو إقامة مؤقتة.</p>
+                    <button class="button button-primary" style="margin-top: 10px;" type="button" onclick="sendServiceBooking('تأشيرة الهند العلاجية لمقيمي مصر')" data-i18n="request_visa">طلب التأشيرة</button>
+                </div>
+            </article>
+            <article class="dest-card">
+                <img src="assets/images/destinations/Qatar/image1.webp" data-slideshow-folder="Qatar" data-slideshow-count="9" alt="تأشيرة قطر لمقيمي الخليج">
+                <div class="dest-info">
+                    <h3 data-i18n="svc_qatar_title">تأشيرة قطر لمقيمي الخليج</h3>
+                    <p data-i18n="svc_qatar_text">إرشاد للمقيمين في الخليج حول متطلبات تأشيرة قطر.</p>
+                    <button class="button button-primary" style="margin-top: 10px;" type="button" onclick="sendServiceBooking('تأشيرة قطر لمقيمي الخليج')" data-i18n="request_visa">طلب التأشيرة</button>
+                </div>
+            </article>
+            <article class="dest-card">
+                <img src="assets/images/destinations/Oman/image1.webp" data-slideshow-folder="Oman" data-slideshow-count="7" alt="تأشيرة عمان لمقيمي الخليج">
+                <div class="dest-info">
+                    <h3 data-i18n="svc_oman_title">تأشيرة عمان لمقيمي الخليج</h3>
+                    <p data-i18n="svc_oman_text">مساعدة في طلب تأشيرة عمان للمقيمين في دول الخليج.</p>
+                    <button class="button button-primary" style="margin-top: 10px;" type="button" onclick="sendServiceBooking('تأشيرة عمان لمقيمي الخليج')" data-i18n="request_visa">طلب التأشيرة</button>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <p>© 2026 <span data-i18n="footer_copy">وكالة ريدستار للسفر والسياحة. رحلات مدروسة بثقة.</span></p>
+            <div class="footer-links">
+                <a href="about.html" data-i18n="nav_about">من نحن</a>
+                <a href="services.html" data-i18n="nav_services">خدماتنا</a>
+                <a href="contact.html" data-i18n="nav_contact">تواصل معنا</a>
+                <a href="privacy.html" data-i18n="footer_privacy">سياسة الخصوصية</a>
+                <a href="terms.html" data-i18n="footer_terms">الشروط والأحكام</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        const serviceTranslations = {
+            "تأشيرة سياحة / عمرة للسعودية": "Saudi tourism / Umrah visa",
+            "تأشيرة زيارة عائلية / تجارية للسعودية": "Saudi family / business visit visa",
+            "تأشيرة عمل واستقدام للسعودية": "Saudi work and recruitment visa",
+            "الموافقة الأمنية لدخول مصر": "Egypt entry security approval",
+            "تأشيرة كينيا": "Kenya visa",
+            "تأشيرة أوغندا": "Uganda visa",
+            "تأشيرة إثيوبيا": "Ethiopia visa",
+            "تأشيرة تنزانيا": "Tanzania visa",
+            "تأشيرة رواندا": "Rwanda visa",
+            "تأشيرة الكاميرون": "Cameroon visa",
+            "تأشيرة زنجبار": "Zanzibar visa",
+            "تأشيرة الصين لمقيمي الخليج": "China visa for Gulf residents",
+            "تأشيرة الهند العلاجية لمقيمي مصر": "India medical visa for Egypt residents",
+            "تأشيرة قطر لمقيمي الخليج": "Qatar visa for Gulf residents",
+            "تأشيرة عمان لمقيمي الخليج": "Oman visa for Gulf residents"
+        };
+
+        function sendServiceBooking(serviceName) {
+            const english = document.documentElement.lang !== "ar";
+            const translatedService = serviceTranslations[serviceName] || serviceName;
+            const serviceLabel = english ? translatedService : serviceName;
+            const msg = !english
+                ? `*طلب خدمة من موقع RedStar Travel*\n\n• *الخدمة المطلوبة:* ${serviceName}\n\n_أرجو تزويدي بالمتطلبات والأسعار وكيفية البدء في الإجراءات._`
+                : `*Service Request from RedStar Travel*\n\n• *Requested service:* ${serviceLabel}\n\n_Please send me the requirements, prices, and how to get started._`;
+            window.open(`https://wa.me/201555988432?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
