@@ -828,11 +828,15 @@ function startDestinationSlideshows() {
         return;
     }
 
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+    }
+
     const imageRoot = window.location.pathname.includes("/visa/")
         ? "../assets/images/destinations/"
         : "assets/images/destinations/";
 
-    images.forEach((image, slideshowIndex) => {
+    const activateSlideshow = (image, slideshowIndex) => {
         const folder = image.dataset.slideshowFolder;
         const count = Number(image.dataset.slideshowCount);
         const requestedStart = Number(image.dataset.slideshowStart);
@@ -854,7 +858,27 @@ function startDestinationSlideshows() {
             showNextImage();
             window.setInterval(showNextImage, 5000);
         }, slideshowIndex * 1600 + 5000);
-    });
+    };
+
+    if (!("IntersectionObserver" in window)) {
+        images.forEach((image, index) => activateSlideshow(image, index));
+        return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) {
+                return;
+            }
+
+            const image = entry.target;
+            const index = Array.from(images).indexOf(image);
+            observer.unobserve(image);
+            activateSlideshow(image, index);
+        });
+    }, { rootMargin: "200px 0px" });
+
+    images.forEach((image) => observer.observe(image));
 }
 
 // عند تحميل الصفحة
