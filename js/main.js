@@ -98,7 +98,7 @@ const translations = {
 
         // contact.html placeholders + service options
         contact_name_placeholder: "اكتب اسمك الكريم",
-        contact_phone_placeholder: "مثال: 01555988432",
+        contact_phone_placeholder: "مثال: +249 912345678",
         contact_msg_placeholder: "اكتب خط السير، التواريخ المقترحة، أو أي ملاحظات إضافية...",
         opt_flight: "حجز طيران (بدر / تاركو / خطوط دولية)",
         opt_egypt_security: "الموافقة الأمنية لدخول مصر",
