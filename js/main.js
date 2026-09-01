@@ -194,8 +194,8 @@ const translations = {
         privacy_share_title: "مشاركة البيانات",
         privacy_share_text: "لا نبيع البيانات الشخصية. نشارك فقط التفاصيل اللازمة لدعم خدمة أو حجز مطلوب.",
         privacy_contact_title: "التواصل",
-        privacy_contact_email: "البريد الإلكتروني: redstarfortravel@gmail.com",
-        privacy_contact_whatsapp: "واتساب: 987327912+ 249",
+        privacy_contact_email: "البريد الإلكتروني: info@redstar-travel.com",
+        privacy_contact_whatsapp: "واتساب: +249 912 327 987",
 
         // terms.html
         terms_eyebrow: "الشروط والأحكام",
@@ -217,8 +217,8 @@ const translations = {
         terms_user_2: "مراجعة شروط وأحكام الشركاء قبل الدفع.",
         terms_user_3: "استخدام الموقع بشكل قانوني ومحترم.",
         terms_contact_title: "التواصل",
-        terms_contact_email: "البريد الإلكتروني: redstarfortravel@gmail.com",
-        terms_contact_whatsapp: "واتساب: 987327912+ 249",
+        terms_contact_email: "البريد الإلكتروني: info@redstar-travel.com",
+        terms_contact_whatsapp: "واتساب: +249 912 327 987",
 
         // passenger-details.html
         pd_heading: "بيانات المسافر الرئيسي",
