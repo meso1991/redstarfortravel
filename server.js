@@ -153,7 +153,7 @@ async function handleSiteStats(req, res) {
     const stats = readSiteStats();
 
     if (req.method === "GET") {
-        stats.visits += 1;
+        stats.visits = Number(stats.visits || 0) + 1;
         writeSiteStats(stats);
         sendJson(res, 200, { visits: stats.visits, reviews: stats.reviews.slice(-20).reverse() });
         return;
@@ -162,6 +162,14 @@ async function handleSiteStats(req, res) {
     if (req.method === "POST") {
         try {
             const input = JSON.parse(await readRequestBody(req));
+
+            if (input && input.type === "visit") {
+                stats.visits = Number(stats.visits || 0) + 1;
+                writeSiteStats(stats);
+                sendJson(res, 200, { visits: stats.visits, reviews: stats.reviews.slice(-20).reverse() });
+                return;
+            }
+
             const name = String(input.name || "Guest").trim().slice(0, 60);
             const comment = String(input.comment || "").trim().slice(0, 500);
             const rating = Number(input.rating);
