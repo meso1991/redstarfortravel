@@ -1,4 +1,5 @@
 const REDSTAR_WHATSAPP = "201555988432";
+const REVIEW_STORAGE_KEY = "redstar_reviews";
 
 // قاموس الترجمة المعتمد لجميع صفحات الموقع
 const translations = {
@@ -869,43 +870,54 @@ async function markHiddenVisit() {
     }
 }
 
-async function loadReviews() {
+function getStoredReviews() {
+    try {
+        const raw = localStorage.getItem(REVIEW_STORAGE_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function saveStoredReviews(reviews) {
+    try {
+        localStorage.setItem(REVIEW_STORAGE_KEY, JSON.stringify(reviews));
+    } catch (error) {
+        // Ignore storage errors in private browsing or restricted environments.
+    }
+}
+
+function renderReviews(reviews) {
     const reviewsList = document.getElementById("reviews-list");
     if (!reviewsList) {
         return;
     }
 
-    try {
-        const response = await fetch("/api/site-stats");
-        if (!response.ok) {
-            throw new Error("Failed to load reviews");
-        }
-
-        const data = await response.json();
-        const reviews = Array.isArray(data.reviews) ? data.reviews : [];
-
-        if (!reviews.length) {
-            reviewsList.innerHTML = '<p class="review-empty">لا توجد تقييمات بعد. كن أول من يكتب رأيك.</p>';
-            return;
-        }
-
-        reviewsList.innerHTML = reviews.map((review) => {
-            const safeName = (review.name || "ضيف").replace(/[<>]/g, "");
-            const safeComment = (review.comment || "").replace(/[<>]/g, "");
-            const stars = "★".repeat(Number(review.rating || 5));
-            return `
-                <article class="review-item">
-                    <div class="review-header">
-                        <strong>${safeName}</strong>
-                        <span class="review-stars">${stars}</span>
-                    </div>
-                    <p>${safeComment}</p>
-                </article>
-            `;
-        }).join("");
-    } catch (error) {
-        reviewsList.innerHTML = '<p class="review-empty">تعذر تحميل التقييمات الآن.</p>';
+    if (!reviews.length) {
+        reviewsList.innerHTML = '<p class="review-empty">لا توجد تقييمات بعد. كن أول من يكتب رأيك.</p>';
+        return;
     }
+
+    reviewsList.innerHTML = reviews.map((review) => {
+        const safeName = (review.name || "ضيف").replace(/[<>]/g, "");
+        const safeComment = (review.comment || "").replace(/[<>]/g, "");
+        const stars = "★".repeat(Number(review.rating || 5));
+        return `
+            <article class="review-item">
+                <div class="review-header">
+                    <strong>${safeName}</strong>
+                    <span class="review-stars">${stars}</span>
+                </div>
+                <p>${safeComment}</p>
+            </article>
+        `;
+    }).join("");
+}
+
+async function loadReviews() {
+    const reviews = getStoredReviews();
+    renderReviews(reviews);
 }
 
 async function submitReview(event) {
@@ -922,7 +934,6 @@ async function submitReview(event) {
     }
 
     const payload = {
-        type: "review",
         name: nameInput.value.trim(),
         rating: Number(ratingInput.value),
         comment: commentInput.value.trim()
@@ -936,19 +947,18 @@ async function submitReview(event) {
     statusElement.textContent = "جاري إرسال التقييم...";
 
     try {
-        const response = await fetch("/api/site-stats", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        });
+        const reviews = getStoredReviews();
+        const nextReviews = [{
+            name: payload.name || "ضيف",
+            rating: payload.rating,
+            comment: payload.comment,
+            date: new Date().toISOString()
+        }, ...reviews].slice(0, 20);
 
-        if (!response.ok) {
-            throw new Error("Failed to submit review");
-        }
-
+        saveStoredReviews(nextReviews);
         form.reset();
+        renderReviews(nextReviews);
         statusElement.textContent = "تم إرسال التقييم بنجاح.";
-        await loadReviews();
     } catch (error) {
         statusElement.textContent = "تعذر إرسال التقييم الآن. حاول مرة أخرى.";
     }
