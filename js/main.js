@@ -869,6 +869,91 @@ async function markHiddenVisit() {
     }
 }
 
+async function loadReviews() {
+    const reviewsList = document.getElementById("reviews-list");
+    if (!reviewsList) {
+        return;
+    }
+
+    try {
+        const response = await fetch("/api/site-stats");
+        if (!response.ok) {
+            throw new Error("Failed to load reviews");
+        }
+
+        const data = await response.json();
+        const reviews = Array.isArray(data.reviews) ? data.reviews : [];
+
+        if (!reviews.length) {
+            reviewsList.innerHTML = '<p class="review-empty">لا توجد تقييمات بعد. كن أول من يكتب رأيك.</p>';
+            return;
+        }
+
+        reviewsList.innerHTML = reviews.map((review) => {
+            const safeName = (review.name || "ضيف").replace(/[<>]/g, "");
+            const safeComment = (review.comment || "").replace(/[<>]/g, "");
+            const stars = "★".repeat(Number(review.rating || 5));
+            return `
+                <article class="review-item">
+                    <div class="review-header">
+                        <strong>${safeName}</strong>
+                        <span class="review-stars">${stars}</span>
+                    </div>
+                    <p>${safeComment}</p>
+                </article>
+            `;
+        }).join("");
+    } catch (error) {
+        reviewsList.innerHTML = '<p class="review-empty">تعذر تحميل التقييمات الآن.</p>';
+    }
+}
+
+async function submitReview(event) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const nameInput = document.getElementById("review-name");
+    const ratingInput = document.getElementById("review-rating");
+    const commentInput = document.getElementById("review-comment");
+    const statusElement = document.getElementById("review-status");
+
+    if (!form || !nameInput || !ratingInput || !commentInput || !statusElement) {
+        return;
+    }
+
+    const payload = {
+        type: "review",
+        name: nameInput.value.trim(),
+        rating: Number(ratingInput.value),
+        comment: commentInput.value.trim()
+    };
+
+    if (!payload.comment || !Number.isInteger(payload.rating) || payload.rating < 1 || payload.rating > 5) {
+        statusElement.textContent = "يرجى كتابة رأيك واختيار تقييم من 1 إلى 5.";
+        return;
+    }
+
+    statusElement.textContent = "جاري إرسال التقييم...";
+
+    try {
+        const response = await fetch("/api/site-stats", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to submit review");
+        }
+
+        form.reset();
+        statusElement.textContent = "تم إرسال التقييم بنجاح.";
+        await loadReviews();
+    } catch (error) {
+        statusElement.textContent = "تعذر إرسال التقييم الآن. حاول مرة أخرى.";
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const currentYearElem = document.querySelector("[data-current-year]");
     if (currentYearElem) currentYearElem.textContent = new Date().getFullYear();
@@ -882,6 +967,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    const reviewForm = document.getElementById("review-form");
+    if (reviewForm) {
+        reviewForm.addEventListener("submit", submitReview);
+    }
+
+    loadReviews();
     markHiddenVisit();
     startDestinationSlideshows();
 
