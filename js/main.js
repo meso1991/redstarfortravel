@@ -438,7 +438,7 @@ const translations = {
 
         // contact.html placeholders + service options
         contact_name_placeholder: "Enter your full name",
-        contact_phone_placeholder: "e.g. 01555988432",
+        contact_phone_placeholder: "e.g. +249 912345678",
         contact_msg_placeholder: "Write your itinerary, preferred dates, or any extra notes...",
         opt_flight: "Flight Booking (Badr / Tarco / International)",
         opt_egypt_security: "Egypt Entry Security Clearance",
@@ -534,8 +534,8 @@ const translations = {
         privacy_share_title: "Data Sharing",
         privacy_share_text: "We do not sell personal data. We only share relevant details when necessary to support a requested service or booking handoff.",
         privacy_contact_title: "Contact",
-        privacy_contact_email: "Email: redstarfortravel@gmail.com",
-        privacy_contact_whatsapp: "WhatsApp: +249 912327987",
+        privacy_contact_email: "Email: info@redstar-travel.com",
+        privacy_contact_whatsapp: "WhatsApp: +249 912 327 987",
 
         // terms.html
         terms_eyebrow: "Terms of Service",
@@ -557,8 +557,8 @@ const translations = {
         terms_user_2: "Review partner terms and conditions before payment.",
         terms_user_3: "Use the website lawfully and respectfully.",
         terms_contact_title: "Contact",
-        terms_contact_email: "Email: redstarfortravel@gmail.com",
-        terms_contact_whatsapp: "WhatsApp: +249 912327987",
+        terms_contact_email: "Email: info@redstar-travel.com",
+        terms_contact_whatsapp: "WhatsApp: +249 912 327 987",
 
         // passenger-details.html
         pd_heading: "Main Passenger Details",
