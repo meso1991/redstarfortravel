@@ -857,6 +857,18 @@ function startDestinationSlideshows() {
 }
 
 // عند تحميل الصفحة
+async function markHiddenVisit() {
+    try {
+        await fetch("/api/site-stats", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ type: "visit" })
+        });
+    } catch (error) {
+        // Silent fail: static deployments do not have a backend counter by default.
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const currentYearElem = document.querySelector("[data-current-year]");
     if (currentYearElem) currentYearElem.textContent = new Date().getFullYear();
@@ -870,6 +882,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    markHiddenVisit();
     startDestinationSlideshows();
 
 });
