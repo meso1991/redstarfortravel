@@ -1,5 +1,75 @@
 const REDSTAR_WHATSAPP = "201555988432";
 const REVIEW_STORAGE_KEY = "redstar_reviews";
+const VISA_SERVICES = {
+    saudi: [{ value: "family_visit_cairo", ar: "👨‍👩‍👧 زيارة عائلية - القاهرة", en: "👨‍👩‍👧 Family Visit - Cairo" }, { value: "family_visit_khartoum", ar: "👨‍👩‍👧 زيارة عائلية - الخرطوم", en: "👨‍👩‍👧 Family Visit - Khartoum" }, { value: "tourist_gcc", ar: "🏖️ تأشيرة سياحية - مقيمو الخليج", en: "🏖️ Tourist Visa - GCC Residents" }, { value: "residence", ar: "🏠 إقامة", en: "🏠 Residence" }, { value: "umrah", ar: "🕋 عمرة", en: "🕋 Umrah" }],
+    egypt: [{ value: "security_approval", ar: "🛡️ موافقة أمنية", en: "🛡️ Security Approval" }, { value: "visa", ar: "🛂 تأشيرة", en: "🛂 Visa" }],
+    china: [{ value: "visa", ar: "🛂 تأشيرة", en: "🛂 Visa" }],
+    india: [{ value: "visa", ar: "🛂 تأشيرة", en: "🛂 Visa" }],
+    qatar: [{ value: "visa", ar: "🛂 تأشيرة إلكترونية", en: "🛂 Electronic Visa" }],
+    uae: [{ value: "tourist", ar: "🏖️ تأشيرة سياحية", en: "🏖️ Tourist Visa" }],
+    oman: [{ value: "visa", ar: "🛂 تأشيرة إلكترونية", en: "🛂 Electronic Visa" }],
+    ethiopia: [{ value: "visa", ar: "🛂 تأشيرة إلكترونية", en: "🛂 Electronic Visa" }],
+    rwanda: [{ value: "visa", ar: "✅ إعفاء من التأشيرة", en: "✅ Visa Waiver" }],
+    uganda: [{ value: "visa", ar: "🏖️ التأشيرة السياحية العادية", en: "🏖️ Ordinary / Tourist Visa" }],
+    south_sudan: [{ value: "visa", ar: "🛂 تأشيرة", en: "🛂 Visa" }],
+    cameroon: [{ value: "visa", ar: "🛂 تأشيرة إلكترونية", en: "🛂 Electronic Visa" }],
+    kenya: [{ value: "visa", ar: "✅ معفى من تصريح السفر الإلكتروني", en: "✅ eTA Exempt" }],
+    tanzania: [{ value: "visa", ar: "🛂 تأشيرة إلكترونية / عند الوصول", en: "🛂 Electronic Visa (eVisa) / Visa on Arrival" }]
+};
+const VISA_DESTINATIONS = {
+    saudi: { ar: "السعودية", en: "Saudi Arabia", type: { ar: "إلكترونية / حسب الفئة", en: "Electronic / category-dependent" }, security: { ar: "لا تتطلب موافقة أمنية منفصلة", en: "No separate security clearance" }, cost: { ar: "يبدأ من 600 درهم إماراتي", en: "From AED 600" }, time: { ar: "5-10 أيام عمل", en: "5-10 business days" }, requirements: { ar: ["جواز سفر ساري لمدة 6 أشهر", "صورة شخصية بخلفية بيضاء", "إثبات السكن أو الدعوة حسب نوع التأشيرة"], en: ["Passport valid for 6 months", "Personal photo with white background", "Accommodation or invitation proof, depending on visa type"] } },
+    uae: { ar: "الإمارات", en: "UAE", type: { ar: "إلكترونية", en: "Electronic" }, security: { ar: "لا تتطلب موافقة أمنية منفصلة", en: "No separate security clearance" }, cost: { ar: "يبدأ من 650 درهم إماراتي", en: "From AED 650" }, time: { ar: "3-5 أيام عمل", en: "3-5 business days" }, requirements: { ar: ["جواز سفر ساري لمدة 6 أشهر", "صورة شخصية", "حجز فندق وتذكرة عودة"], en: ["Passport valid for 6 months", "Personal photo", "Hotel booking and return ticket"] } },
+    egypt: { ar: "مصر", en: "Egypt", type: { ar: "موافقة أمنية + تأشيرة حسب الحالة", en: "Security clearance + visa as applicable" }, security: { ar: "مطلوبة للسودانيين.", en: "Required for Sudanese applicants." }, cost: { ar: "يبدأ من 470 دولار", en: "From USD 470" }, time: { ar: "7-15 يوم عمل", en: "7-15 business days" }, requirements: { ar: ["جواز سفر ساري لمدة 6 أشهر", "صورة شخصية", "عنوان الإقامة داخل مصر", "مستندات داعمة حسب الغرض من السفر"], en: ["Passport valid for 6 months", "Personal photo", "Address in Egypt", "Supporting documents based on travel purpose"] } },
+    china: { ar: "الصين", en: "China", type: { ar: "ملصق على الجواز", en: "Passport sticker" }, security: { ar: "لا تتطلب موافقة أمنية منفصلة", en: "No separate security clearance" }, cost: { ar: "يحدد بعد مراجعة الطلب", en: "Confirmed after file review" }, time: { ar: "10-20 يوم عمل", en: "10-20 business days" }, requirements: { ar: ["جواز سفر ساري", "صورة شخصية", "إثبات الإقامة في الخليج", "خطاب دعوة أو مستندات الرحلة"], en: ["Valid passport", "Personal photo", "Proof of GCC residency", "Invitation letter or travel documents"] } },
+    india: { ar: "الهند", en: "India", type: { ar: "إلكترونية أو ملصق حسب الفئة", en: "Electronic or sticker, depending on category" }, security: { ar: "لا تتطلب موافقة أمنية منفصلة", en: "No separate security clearance" }, cost: { ar: "يحدد بعد مراجعة الطلب", en: "Confirmed after file review" }, time: { ar: "5-10 أيام عمل", en: "5-10 business days" }, requirements: { ar: ["جواز سفر ساري", "صورة شخصية", "الإقامة المصرية عند التقديم للتأشيرة الطبية", "تقرير طبي عند الحاجة"], en: ["Valid passport", "Personal photo", "Egyptian residency for medical visa applications", "Medical report when required"] } },
+    qatar: { ar: "قطر", en: "Qatar", type: { ar: "إلكترونية", en: "Electronic" }, security: { ar: "لا تتطلب موافقة أمنية منفصلة", en: "No separate security clearance" }, cost: { ar: "يحدد بعد مراجعة الطلب", en: "Confirmed after file review" }, time: { ar: "3-7 أيام عمل", en: "3-7 business days" }, requirements: { ar: ["جواز سفر ساري", "صورة شخصية", "إثبات الإقامة في الخليج", "حجز فندق وتذكرة عودة"], en: ["Valid passport", "Personal photo", "Proof of GCC residency", "Hotel booking and return ticket"] } },
+    oman: { ar: "سلطنة عمان", en: "Oman", type: { ar: "إلكترونية", en: "Electronic" }, security: { ar: "لا تتطلب موافقة أمنية منفصلة", en: "No separate security clearance" }, cost: { ar: "يحدد بعد مراجعة الطلب", en: "Confirmed after file review" }, time: { ar: "3-7 أيام عمل", en: "3-7 business days" }, requirements: { ar: ["جواز سفر ساري", "صورة شخصية", "إثبات الإقامة في الخليج", "حجز فندق وتذكرة عودة"], en: ["Valid passport", "Personal photo", "Proof of GCC residency", "Hotel booking and return ticket"] } },
+    ethiopia: { ar: "إثيوبيا", en: "Ethiopia", type: { ar: "إلكترونية", en: "Electronic" }, security: { ar: "لا تتطلب موافقة أمنية منفصلة", en: "No separate security clearance" }, cost: { ar: "87 دولار لمدة 30 يومًا", en: "USD 87 for 30 days" }, time: { ar: "3 أيام تقريبًا", en: "Usually 3 days" }, requirements: { ar: ["صورة شخصية حديثة بحجم صورة الجواز", "جواز سفر ساري لمدة لا تقل عن 6 أشهر من تاريخ الدخول المقصود إلى إثيوبيا"], en: ["Recent personal photo in passport-photo size", "Passport valid for at least 6 months from the intended date of entry into Ethiopia"] } },
+    rwanda: { ar: "رواندا", en: "Rwanda", type: { ar: "إعفاء من التأشيرة", en: "Visa Waiver" }, security: { ar: "للمواطنين السودانيين", en: "For Sudanese citizens" }, cost: { ar: "مجاني", en: "FREE" }, time: { ar: "حتى 30 يومًا", en: "Up to 30 days" }, requirements: { ar: ["الدخول: مرة واحدة", "التوفر: تأشيرة عند الوصول أو عبر الإنترنت", "الجنسية: سوداني"], en: ["Entry: Single Entry", "Availability: Visa on Arrival / Online", "For: Sudanese Citizens"] } },
+    uganda: { ar: "أوغندا", en: "Uganda", type: { ar: "إلكترونية (eVisa)", en: "Electronic (eVisa)" }, security: { ar: "لا تتطلب موافقة أمنية منفصلة", en: "No separate security clearance" }, cost: { ar: "50 دولار أمريكي", en: "USD 50" }, time: { ar: "تحدد بعد مراجعة الطلب", en: "Confirmed after application review" }, requirements: { ar: ["صفحة البيانات الشخصية من الجواز، على أن تكون صلاحيته 6 أشهر على الأقل", "صورة شخصية حديثة بحجم صورة الجواز", "تذكرة عودة", "خطة الرحلة", "خط سير الرحلة أو الحجز", "حجز فندقي أو عنوان الإقامة عند وجود ترتيب إقامة آخر"], en: ["Passport bio-data page, with at least 6 months validity", "Recent passport-size photograph", "Return ticket", "Tour plan", "Travel itinerary / booking", "Hotel booking / reservation or accommodation address"] } },
+    south_sudan: { ar: "جنوب السودان", en: "South Sudan", type: { ar: "ملصق على الجواز", en: "Passport sticker" }, security: { ar: "تؤكد بعد مراجعة الملف", en: "Confirmed after file review" }, cost: { ar: "يبدأ من 105 دولار", en: "From USD 105" }, time: { ar: "7-15 يوم عمل", en: "7-15 business days" }, requirements: { ar: ["جواز سفر ساري", "صورة شخصية", "خطاب دعوة أو عنوان الإقامة"], en: ["Valid passport", "Personal photo", "Invitation letter or accommodation address"] } },
+    cameroon: { ar: "الكاميرون", en: "Cameroon", type: { ar: "إلكترونية", en: "Electronic" }, security: { ar: "تؤكد بعد مراجعة الملف", en: "Confirmed after file review" }, cost: { ar: "225 دولار أمريكي", en: "USD 225" }, time: { ar: "الإجراء العادي: حتى 72 ساعة | الإجراء السريع: 24 ساعة", en: "Standard processing: up to 72 hours | Express processing: 24 hours" }, requirements: { ar: ["شهادة أو إثبات الإقامة", "شهادة التطعيم الدولية", "إثبات الغرض من الزيارة", "تذكرة طيران أو تذكرة مواصلات", "جواز السفر أو وثيقة السفر", "شهادة أو إثبات الإقامة", "إثبات المهنة", "إثبات القدرة المالية على تغطية تكاليف الإقامة والمعيشة"], en: ["Certificate of Accommodation", "International Certificate of Vaccination", "Proof of purpose of the visit", "Flight Ticket / Transport Ticket", "Passport / Travel Document", "Certificate of residence", "Proof of profession", "Proof of sufficient means of subsistence"] } },
+    kenya: { ar: "كينيا", en: "Kenya", type: { ar: "معفى من تصريح السفر الإلكتروني", en: "eTA Exempt" }, security: { ar: "لا توجد رسوم حكومية لتصريح eTA", en: "No government eTA fee" }, cost: { ar: "مجاني", en: "Free" }, time: { ar: "حتى 60 يومًا", en: "Up to 60 days" }, requirements: { ar: ["الجنسية: سوداني", "حالة الدخول: معفى من eTA", "مدة الإقامة: حتى 60 يومًا"], en: ["Nationality: Sudanese", "Entry status: eTA Exempt", "Stay: up to 60 days"] } },
+    tanzania: { ar: "تنزانيا / زنجبار", en: "Tanzania / Zanzibar", type: { ar: "تأشيرة إلكترونية / تأشيرة عند الوصول", en: "Electronic Visa (eVisa) / Visa on Arrival" }, security: { ar: "للمواطنين السودانيين", en: "For Sudanese citizens" }, cost: { ar: "50 دولار أمريكي", en: "USD 50" }, time: { ar: "حتى 10 أيام", en: "Up to 10 days" }, requirements: { ar: ["تأشيرة سياحية للمواطنين السودانيين", "صلاحية التأشيرة: حتى 90 يومًا"], en: ["Tourist visa for Sudanese citizens", "Validity: up to 90 days"] } }
+};
+
+const VISA_GUIDES = {
+    rwanda: {
+        visa: { type: { ar: "إعفاء من التأشيرة", en: "Visa Waiver" }, price: { ar: "مجاني", en: "FREE" }, time: { ar: "حتى 30 يومًا", en: "Up to 30 days" }, sections: [{ title: { ar: "تفاصيل الدخول", en: "Entry details" }, items: { ar: ["الجنسية: سوداني.", "رسوم الحكومة: مجانًا.", "مدة الإقامة: حتى 30 يومًا.", "الدخول: مرة واحدة.", "التوفر: تأشيرة عند الوصول أو عبر الإنترنت."], en: ["For: Sudanese Citizens.", "Government Fee: FREE.", "Stay: Up to 30 days.", "Entry: Single Entry.", "Availability: Visa on Arrival / Online."] } }] }
+    },
+    uganda: {
+        visa: { type: { ar: "تأشيرة سياحية إلكترونية", en: "Tourist eVisa" }, price: { ar: "50 دولار أمريكي", en: "USD 50" }, time: { ar: "تحدد بعد مراجعة الطلب", en: "Confirmed after application review" }, sections: [{ title: { ar: "تفاصيل التأشيرة", en: "Visa details" }, items: { ar: ["الجنسية المستهدفة: سوداني.", "الفئة: Uganda Ordinary/Tourist Visa.", "الدخول: مرة واحدة.", "الرسوم الحكومية: 50 دولار أمريكي."], en: ["Target nationality: Sudanese.", "Category: Uganda Ordinary/Tourist Visa.", "Entries: Single Entry.", "Government fee: USD 50."] } }, { title: { ar: "متطلبات السياحة - Tourism", en: "Tourism requirements" }, items: { ar: ["صفحة البيانات الشخصية من الجواز، على أن تكون صلاحيته 6 أشهر على الأقل.", "صورة شخصية حديثة بحجم صورة الجواز.", "تذكرة عودة.", "خطة الرحلة.", "خط سير الرحلة أو الحجز.", "حجز فندقي أو عنوان الإقامة في حال وجود ترتيب إقامة آخر."], en: ["Passport bio-data page, with at least 6 months validity.", "Recent passport-size photograph.", "Return Ticket.", "Tour plan.", "Travel itinerary / booking.", "Hotel booking / reservation or accommodation address if another arrangement is in place."] } }] }
+    },
+    kenya: {
+        visa: { type: { ar: "معفى من تصريح السفر الإلكتروني", en: "eTA Exempt" }, price: { ar: "مجاني", en: "Free" }, time: { ar: "حتى 60 يومًا", en: "Up to 60 days" }, sections: [{ title: { ar: "حالة الدخول", en: "Entry status" }, items: { ar: ["للمواطنين السودانيين: الدخول معفى من تصريح eTA.", "لا توجد رسوم حكومية لتصريح eTA.", "مدة الإقامة: حتى 60 يومًا."], en: ["For Sudanese citizens: entry is eTA exempt.", "Government eTA fee: Free.", "Stay: up to 60 days."] } }] }
+    },
+    tanzania: {
+        visa: { type: { ar: "تأشيرة إلكترونية / تأشيرة عند الوصول", en: "Electronic Visa (eVisa) / Visa on Arrival" }, price: { ar: "50 دولار أمريكي", en: "USD 50" }, time: { ar: "حتى 10 أيام", en: "Up to 10 days" }, sections: [{ title: { ar: "تفاصيل التأشيرة", en: "Visa details" }, items: { ar: ["للمواطنين السودانيين.", "التأشيرة السياحية متاحة إلكترونيًا أو عند الوصول.", "صلاحية التأشيرة: حتى 90 يومًا."], en: ["For Sudanese citizens.", "Tourist visa available as an eVisa or on arrival.", "Validity: up to 90 days."] } }, { title: { ar: "مدة التنفيذ", en: "Processing" }, items: { ar: ["قد تستغرق المعالجة حتى 10 أيام."], en: ["Processing may take up to 10 days."] } }] }
+    },
+    cameroon: {
+        visa: { type: { ar: "تأشيرة إلكترونية", en: "Electronic Visa" }, price: { ar: "225 دولار أمريكي", en: "USD 225" }, time: { ar: "العادي: حتى 72 ساعة | السريع: 24 ساعة", en: "Standard: up to 72 hours | Express: 24 hours" }, sections: [{ title: { ar: "المتطلبات الظاهرة في البوابة", en: "Documents shown in the portal" }, items: { ar: ["شهادة أو إثبات الإقامة.", "شهادة التطعيم الدولية.", "إثبات الغرض من الزيارة.", "تذكرة طيران أو تذكرة مواصلات.", "جواز السفر أو وثيقة السفر.", "شهادة أو إثبات الإقامة.", "إثبات المهنة.", "إثبات القدرة المالية على تغطية تكاليف الإقامة والمعيشة."], en: ["Certificate of Accommodation.", "International Certificate of Vaccination.", "Proof of purpose of the visit.", "Flight Ticket / Transport Ticket.", "Passport / Travel Document.", "Certificate of residence.", "Proof of profession.", "Proof of sufficient means of subsistence."] } }] }
+    },
+    egypt: {
+        security_approval: { type: { ar: "موافقة أمنية", en: "Security Approval" }, price: { ar: "150 دولار أمريكي", en: "USD 150" }, time: { ar: "3-5 أيام عمل", en: "3-5 business days" }, sections: [{ title: { ar: "المتطلبات", en: "Requirements" }, items: { ar: ["صورة من جواز السفر.", "يجب أن يكون الجواز ساريًا لأكثر من 6 أشهر.", "تحديد جهة القدوم."], en: ["Passport copy.", "Passport must be valid for more than 6 months.", "Specify the point of departure." ] } }] },
+        visa: { type: { ar: "تأشيرة ملصقة على الجواز", en: "Sticker Visa" }, price: { ar: "400 دولار أمريكي", en: "USD 400" }, time: { ar: "7-10 أيام عمل", en: "7-10 business days" }, sections: [{ title: { ar: "المتطلبات", en: "Requirements" }, items: { ar: ["جواز سفر ساري لمدة لا تقل عن 6 أشهر.", "صورة شخصية حديثة بخلفية بيضاء."], en: ["Passport valid for at least 6 months.", "Recent personal photo with a white background."] } }] }
+    },
+    saudi: {
+        family_visit_cairo: { type: { ar: "تأشيرة إلكترونية", en: "Electronic Visa" }, price: { ar: "11,500 جنيه مصري", en: "EGP 11,500" }, time: { ar: "تحدد بعد مراجعة الملف", en: "Confirmed after file review" }, sections: [{ title: { ar: "جهة التقديم: القاهرة", en: "Application point: Cairo" }, items: { ar: ["صورة مستند تأشيرة الزيارة العائلية المعتمد من وزارة الخارجية السعودية متضمنًا رقم التأشيرة.", "صورة هوية مقيم سارية وصورة جواز سفر المقيم في السعودية.", "أصل جواز السفر لكل مسافر، ساري 6 أشهر ويحتوي على صفحات فارغة.", "صورتان شخصيتان حديثتان لكل فرد، خلفية بيضاء، مقاس 4×6.", "إثبات صلة القرابة موثق حسب الحالة: قسيمة الزواج أو الرقم الوطني، من السفارة السودانية ووزارة الخارجية المصرية."] , en: ["Approved family visit visa document from the Saudi Foreign Ministry, including the visa number.", "Valid resident ID and passport copy of the Saudi resident.", "Original passport for each traveler, valid for 6 months with blank pages.", "Two recent white-background photos per person, size 4×6.", "Certified proof of relationship, as applicable, through the Sudanese Embassy and Egyptian Foreign Ministry."] } }] },
+        family_visit_khartoum: { type: { ar: "تأشيرة إلكترونية", en: "Electronic Visa" }, price: { ar: "1966-2026: 750 ريال | 1956-1965: 800 ريال | 1955 وما دون: 1,000 ريال", en: "1966-2026: SAR 750 | 1956-1965: SAR 800 | 1955 and earlier: SAR 1,000" }, time: { ar: "7-10 أيام عمل", en: "7-10 business days" }, sections: [{ title: { ar: "جهة التقديم: الخرطوم", en: "Application point: Khartoum" }, items: { ar: ["صورة مستند تأشيرة الزيارة العائلية بعد اعتماده من وزارة الخارجية السعودية.", "يجب أن تكون جهة القدوم المحددة بورتسودان.", "صورة محدثة من هوية مقيم وصورة جواز السفر.", "أصل الجواز الإلكتروني لكل فرد، ساري 6 أشهر ويحتوي على صفحات فارغة.", "صورتان حديثتان لكل شخص، خلفية بيضاء، مقاس 4×6.", "إثبات صلة القرابة موثق من وزارة الخارجية السودانية: الزواج أو شهادة الميلاد أو الرقم الوطني."] , en: ["Approved family visit visa document from the Saudi Foreign Ministry.", "The selected arrival point must be Port Sudan.", "Updated resident ID and passport copies.", "Original electronic passport for each person, valid for 6 months with blank pages.", "Two recent white-background photos per person, size 4×6.", "Proof of relationship certified by the Sudanese Foreign Ministry: marriage, birth certificate, or national ID."] } }] },
+        tourist_gcc: { type: { ar: "تأشيرة إلكترونية", en: "Electronic Visa" }, price: { ar: "يحدد بعد مراجعة الملف", en: "Confirmed after file review" }, time: { ar: "5-10 أيام عمل", en: "5-10 business days" }, sections: [{ title: { ar: "المتطلبات", en: "Requirements" }, items: { ar: ["جواز سفر ساري لمدة 6 أشهر.", "صورة شخصية بخلفية بيضاء.", "إثبات الإقامة في دول الخليج."], en: ["Passport valid for 6 months.", "White-background personal photo.", "Proof of GCC residency."] } }] },
+        residence: { type: { ar: "تأشيرة إلكترونية", en: "Electronic Visa" }, price: { ar: "يحدد بعد مراجعة الملف", en: "Confirmed after file review" }, time: { ar: "يحدد بعد مراجعة الملف", en: "Confirmed after file review" }, sections: [{ title: { ar: "المتطلبات", en: "Requirements" }, items: { ar: ["جواز سفر ساري.", "صورة شخصية.", "مستندات الإقامة أو العمل حسب الحالة."], en: ["Valid passport.", "Personal photo.", "Residence or employment documents, as applicable."] } }] },
+        umrah: { type: { ar: "تأشيرة إلكترونية", en: "Electronic Visa" }, price: { ar: "يحدد بعد مراجعة الملف", en: "Confirmed after file review" }, time: { ar: "يحدد حسب الموسم", en: "Depends on the season" }, sections: [{ title: { ar: "المتطلبات", en: "Requirements" }, items: { ar: ["جواز سفر ساري لمدة 6 أشهر.", "صورة شخصية بخلفية بيضاء.", "بيانات الرحلة والسكن."], en: ["Passport valid for 6 months.", "White-background personal photo.", "Travel and accommodation details."] } }] }
+    },
+    india: {
+        visa: { type: { ar: "Medical Visa", en: "Medical Visa" }, price: { ar: "يحدد بعد مراجعة الملف", en: "Confirmed after file review" }, time: { ar: "7-21 يوم عمل", en: "7-21 business days" }, sections: [{ title: { ar: "المستندات الشخصية والإقامة في مصر", en: "Personal documents and residence in Egypt" }, items: { ar: ["أصل الجواز ساريًا 6 أشهر على الأقل وبصفحتين فارغتين، مع صورة صفحة البيانات والتأشيرات السابقة.", "أصل وصورة كارت الإقامة المصرية السارية أو بطاقة UNHCR.", "صورتان حديثتان مقاس 5×5 سم بخلفية بيضاء وملامح الوجه كاملة."], en: ["Original passport valid for at least 6 months with two blank pages, plus bio-page and previous visa copies.", "Original and copy of valid Egyptian residence card or UNHCR card.", "Two recent 5×5 cm white-background photos with the full face visible."] } }, { title: { ar: "استمارة التقديم والأوراق الطبية", en: "Application form and medical documents" }, items: { ar: ["تعبئة وطباعة الاستمارة الرسمية واختيار Egypt - Cairo ثم توقيع المريض والمرافق.", "خطاب دعوة طبي مختوم من مستشفى معتمد في الهند يتضمن بيانات المريض والمرافق والتشخيص والخطة العلاجية.", "تقارير وفحوصات طبية حديثة باللغة الإنجليزية من استشاري معتمد.", "للمرافق: استمارة Medical Attendant ومستند يثبت صلة القرابة مترجم ومعتمد.", "كشف حساب آخر 3-6 أشهر أو إثبات القدرة على تحمل العلاج والإقامة.", "شهادة الحمى الصفراء وشهادة شلل الأطفال ساريتان وموثقتان."], en: ["Complete and print the official form, select Egypt - Cairo, and sign by the patient and attendant.", "Stamped medical invitation from an approved Indian hospital with patient, attendant, diagnosis, and treatment details.", "Recent medical reports in English from a certified consultant.", "For an attendant: Medical Attendant form and translated, certified proof of relationship.", "Bank statement for the last 3-6 months or proof of funds for treatment and accommodation.", "Valid, certified Yellow Fever and Polio vaccination certificates."] } }] }
+    },
+    oman: {
+        visa: { type: { ar: "تأشيرة إلكترونية", en: "Electronic Visa" }, price: { ar: "25 دولار أمريكي للشخص", en: "USD 25 per person" }, time: { ar: "24-48 ساعة عمل، وقد تمتد إلى 3-4 أيام عند التدقيق", en: "24-48 business hours, up to 3-4 days for additional review" }, sections: [{ title: { ar: "تأشيرة مقيمي دول الخليج - GCC Residents", en: "GCC Residents Visa" }, items: { ar: ["الإقامة الخليجية سارية 3 أشهر على الأقل عند التقديم والوصول: السعودية، الإمارات، قطر، الكويت أو البحرين.", "جواز سفر ساري 6 أشهر.", "المهنة في الإقامة ضمن المهن المعتمدة لدى شرطة عمان السلطانية.", "المرافقون: الزوجة والأبناء والعمالة المنزلية تحت كفالة المقيم الرئيسي وفق الفئة 29B، مع السفر برفقته أو القدوم إليه.", "تذكرة ذهاب وعودة مؤكدة وحجز فندقي أو إثبات عنوان الإقامة في عمان."], en: ["GCC residence valid for at least 3 months at application and arrival: Saudi Arabia, UAE, Qatar, Kuwait, or Bahrain.", "Passport valid for 6 months.", "The profession on the residence must be on the Royal Oman Police approved list.", "Dependents may apply under category 29B when travelling with or joining the main resident.", "Confirmed return ticket and hotel booking or proof of accommodation address in Oman."] } }, { title: { ar: "الصلاحية والإقامة", en: "Validity and stay" }, items: { ar: ["الدخول إلى عمان خلال 3 أشهر من تاريخ الإصدار.", "مدة الإقامة 28-30 يومًا من تاريخ الدخول.", "يمكن تمديدها مرة واحدة لمدة مماثلة حسب القواعد المطبقة."], en: ["Enter Oman within 3 months from issue date.", "Stay is 28-30 days from entry.", "It may be extended once for a similar period, subject to applicable rules."] } }] },
+    },
+    ethiopia: {
+        visa: { type: { ar: "تأشيرة سياحية إلكترونية", en: "Tourist eVisa" }, price: { ar: "87 دولار لمدة 30 يومًا", en: "USD 87 for 30 days" }, time: { ar: "عادةً 3 أيام", en: "Usually 3 days" }, sections: [{ title: { ar: "تفاصيل التأشيرة", en: "Visa details" }, items: { ar: ["الجنسية المستهدفة: سوداني.", "التأشيرة إلكترونية.", "الدخول: مرة واحدة.", "مدة الإقامة: 30 يومًا فقط."], en: ["Target nationality: Sudanese.", "The visa is electronic.", "Entries: single entry.", "Length of stay: 30 days only."] } }, { title: { ar: "المتطلبات", en: "Requirements" }, items: { ar: ["صورة شخصية حديثة بحجم صورة الجواز.", "جواز سفر ساري لمدة لا تقل عن 6 أشهر من تاريخ الدخول المقصود إلى إثيوبيا."], en: ["Recent personal photo in passport-photo size.", "Passport valid for at least 6 months from the intended date of entry into Ethiopia."] } }, { title: { ar: "مدة التنفيذ", en: "Processing time" }, items: { ar: ["تُعالج الطلبات عادةً خلال 3 أيام في الظروف العادية.", "يُنصح بتقديم الطلب قبل الوصول بثلاثة أيام على الأقل."], en: ["Applications are usually processed within 3 days under normal conditions.", "Applicants are advised to apply at least three days before arrival."] } }] }
+    }
+};
 
 (function () {
     if (window.fbq) return;
@@ -275,6 +345,41 @@ const translations = {
         visa_dir_hero_eyebrow: "دليل التأشيرات",
         visa_dir_hero_title: "اختر وجهة التأشيرة وانتقل مباشرة إلى التفاصيل الصحيحة.",
         visa_dir_hero_text: "تصفح صفحات الدول للاطلاع على المتطلبات وملاحظات الخدمة وإجراءات الاستفسار المباشر عبر ريدستار.",
+        visa_apply_kicker: "طلب تأشيرة",
+        visa_apply_title: "أكمل طلب التأشيرة في أربع خطوات",
+        visa_apply_text: "اختر الوجهة، راجع المتطلبات، ارفع المستندات، ثم أكد طلبك عبر واتساب.",
+        visa_step_destination: "الوجهة",
+        visa_step_requirements: "المتطلبات",
+        visa_step_details: "بياناتك",
+        visa_step_confirmation: "التأكيد",
+        visa_step1_title: "إلى أين ستسافر؟",
+        visa_step1_text: "اختر الوجهة والجنسية لعرض المتطلبات الأولية المناسبة.",
+        visa_destination_label: "الوجهة",
+        visa_destination_placeholder: "اختر الوجهة",
+        visa_nationality_label: "الجنسية",
+        visa_nationality_placeholder: "اختر جنسيتك",
+        visa_service_label: "خدمة التأشيرة",
+        visa_service_placeholder: "اختر الوجهة أولاً",
+        visa_birth_year_label: "سنة ميلاد المتقدم كما هي موضحة في المستند",
+        visa_birth_year_help: "سيظهر السعر بعد إدخال سنة الميلاد.",
+        visa_continue: "متابعة",
+        visa_step2_title: "راجع المتطلبات",
+        visa_step2_text: "راجع مسار التأشيرة والمستندات والتكلفة ومدة التنفيذ.",
+        visa_back: "رجوع",
+        visa_continue_form: "متابعة إلى الطلب",
+        visa_step3_title: "بيانات المسافر والمستندات",
+        visa_step3_text: "تُرسل ملفاتك إلى السيرفر المحلي مع الطلب ولا تظهر كملفات عامة على الموقع.",
+        visa_name_label: "الاسم بالكامل",
+        visa_phone_label: "الهاتف / واتساب",
+        visa_city_label: "المدينة",
+        visa_address_label: "العنوان",
+        visa_passport_label: "صورة الجواز",
+        visa_photo_label: "الصورة الشخصية",
+        visa_notes_label: "ملاحظات إضافية",
+        visa_submit: "إرسال طلب التأشيرة",
+        visa_step4_title: "تم تسجيل طلبك",
+        visa_step4_text: "احتفظ برقم الطلب وأرسله عبر واتساب حتى نطابق مستنداتك ونؤكد الدفع.",
+        visa_whatsapp_confirm: "تواصل عبر واتساب لتأكيد الدفع",
         saudi_country: "المملكة العربية السعودية",
         visa_dir_saudi_text: "زيارة، عائلية، عمرة، وإرشادات السفر.",
         open_page: "فتح الصفحة",
@@ -614,6 +719,41 @@ const translations = {
         visa_dir_hero_eyebrow: "Visa Directory",
         visa_dir_hero_title: "Choose a visa destination and move straight to the right details.",
         visa_dir_hero_text: "Browse country pages for requirements, service notes, and direct inquiry actions through RedStar.",
+        visa_apply_kicker: "Visa application",
+        visa_apply_title: "Complete your visa request in four steps",
+        visa_apply_text: "Choose your destination, review the requirements, upload your documents, then confirm your request on WhatsApp.",
+        visa_step_destination: "Destination",
+        visa_step_requirements: "Requirements",
+        visa_step_details: "Your details",
+        visa_step_confirmation: "Confirmation",
+        visa_step1_title: "Where are you travelling?",
+        visa_step1_text: "Select your destination and nationality to see the relevant starting requirements.",
+        visa_destination_label: "Destination",
+        visa_destination_placeholder: "Choose a destination",
+        visa_nationality_label: "Nationality",
+        visa_nationality_placeholder: "Choose your nationality",
+        visa_service_label: "Visa service",
+        visa_service_placeholder: "Choose a destination first",
+        visa_birth_year_label: "Applicant birth year as shown on the document",
+        visa_birth_year_help: "The price will appear after you enter the birth year.",
+        visa_continue: "Continue",
+        visa_step2_title: "Review the requirements",
+        visa_step2_text: "Check the visa route, documents, cost, and expected processing time.",
+        visa_back: "Back",
+        visa_continue_form: "Continue to application",
+        visa_step3_title: "Applicant details and documents",
+        visa_step3_text: "Your files are sent to the local server with the order and are not exposed as public website files.",
+        visa_name_label: "Full name",
+        visa_phone_label: "Phone / WhatsApp",
+        visa_city_label: "City",
+        visa_address_label: "Address",
+        visa_passport_label: "Passport image",
+        visa_photo_label: "Personal photo",
+        visa_notes_label: "Additional notes",
+        visa_submit: "Send visa application",
+        visa_step4_title: "Your request is registered",
+        visa_step4_text: "Keep this order number. Send it on WhatsApp so our team can match your documents and confirm payment.",
+        visa_whatsapp_confirm: "Contact WhatsApp to confirm payment",
         saudi_country: "Saudi Arabia",
         visa_dir_saudi_text: "Visit, family, Umrah, and travel guidance.",
         open_page: "Open Page",
@@ -836,6 +976,132 @@ function sendVisaRequest(countryName, visaType) {
     openWhatsAppMessage(msg);
 }
 
+function setupVisaWizard() {
+    const wizard = document.getElementById("visa-wizard");
+    if (!wizard) return;
+
+    const destinationSelect = document.getElementById("visa-destination");
+    const nationalitySelect = document.getElementById("visa-nationality");
+    const serviceSelect = document.getElementById("visa-service");
+    const birthYearBox = document.getElementById("visa-birth-year-box");
+    const birthYearInput = document.getElementById("visa-birth-year");
+    const requirements = document.getElementById("visa-requirements");
+    const form = document.getElementById("visa-order-form");
+    const status = document.getElementById("visa-order-status");
+    const language = () => (isArabicPage() ? "ar" : "en");
+    const nationalities = { ar: [["sudanese", "سوداني"]], en: [["sudanese", "Sudanese"]] };
+
+    Object.entries(VISA_DESTINATIONS).forEach(([key, visa]) => {
+        const option = document.createElement("option");
+        option.value = key;
+        option.textContent = visa[language()];
+        destinationSelect.appendChild(option);
+    });
+
+    function fillNationalities() {
+        nationalitySelect.innerHTML = `<option value="">${language() === "ar" ? "اختر جنسيتك" : "Choose your nationality"}</option>`;
+        nationalities[language()].forEach(([value, label]) => {
+            const option = document.createElement("option");
+            option.value = value;
+            option.textContent = label;
+            nationalitySelect.appendChild(option);
+        });
+    }
+
+    function fillServices() {
+        const currentLanguage = language();
+        const services = VISA_SERVICES[destinationSelect.value] || [];
+        const selectedValue = serviceSelect.value;
+        serviceSelect.innerHTML = `<option value="">${services.length ? (currentLanguage === "ar" ? "اختر الخدمة" : "Choose a service") : (currentLanguage === "ar" ? "اختر الوجهة أولاً" : "Choose a destination first")}</option>`;
+        serviceSelect.disabled = !services.length;
+        services.forEach((service) => {
+            const option = document.createElement("option");
+            option.value = service.value;
+            option.textContent = service[currentLanguage];
+            serviceSelect.appendChild(option);
+        });
+        if (services.some((service) => service.value === selectedValue)) serviceSelect.value = selectedValue;
+        const requiresBirthYear = destinationSelect.value === "saudi" && serviceSelect.value === "family_visit_khartoum";
+        birthYearBox.hidden = !requiresBirthYear;
+        birthYearInput.required = requiresBirthYear;
+        if (!requiresBirthYear) birthYearInput.value = "";
+    }
+
+    function getKhartoumPrice(birthYear, currentLanguage) {
+        const year = Number(birthYear);
+        if (!Number.isInteger(year) || year < 1900 || year > 2026) return currentLanguage === "ar" ? "أدخل سنة الميلاد لإظهار السعر" : "Enter the birth year to show the price";
+        if (year >= 1966) return currentLanguage === "ar" ? "750 ريال" : "SAR 750";
+        if (year >= 1956) return currentLanguage === "ar" ? "800 ريال" : "SAR 800";
+        return currentLanguage === "ar" ? "1,000 ريال" : "SAR 1,000";
+    }
+
+    function showStep(step) {
+        wizard.querySelectorAll("[data-wizard-panel]").forEach((panel) => {
+            const active = Number(panel.dataset.wizardPanel) === step;
+            panel.hidden = !active;
+            panel.classList.toggle("active", active);
+        });
+        wizard.querySelectorAll("[data-wizard-step]").forEach((item) => item.classList.toggle("active", Number(item.dataset.wizardStep) <= step));
+        wizard.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function renderRequirements() {
+        const visa = VISA_DESTINATIONS[destinationSelect.value];
+        if (!visa) return;
+        const currentLanguage = language();
+        const selectedService = VISA_SERVICES[destinationSelect.value]?.find((service) => service.value === serviceSelect.value);
+        const guide = VISA_GUIDES[destinationSelect.value]?.[selectedService?.value];
+        const visaType = selectedService?.value === "security_approval"
+            ? { ar: "موافقة أمنية", en: "Security Approval" }
+            : visa.type.en.toLowerCase().includes("sticker") || ["china", "india", "south_sudan"].includes(destinationSelect.value)
+                ? { ar: "تأشيرة ملصقة على الجواز", en: "Sticker Visa" }
+                : { ar: "تأشيرة إلكترونية", en: "Electronic Visa" };
+        const guideSections = guide?.sections || [{ title: { ar: "المتطلبات الأساسية", en: "Basic requirements" }, items: visa.requirements }];
+        const displayedPrice = selectedService?.value === "family_visit_khartoum"
+            ? getKhartoumPrice(birthYearInput.value, currentLanguage)
+            : guide?.price?.[currentLanguage] || visa.cost[currentLanguage];
+        const details = guideSections.map((section) => `<div class="requirement-card requirement-list"><strong>${section.title[currentLanguage]}</strong><ul>${section.items[currentLanguage].map((item) => `<li>${item}</li>`).join("")}</ul></div>`).join("");
+        requirements.innerHTML = `<div class="requirement-card"><strong>${currentLanguage === "ar" ? "الوجهة" : "Destination"}</strong><span>${visa[currentLanguage]}</span></div><div class="requirement-card"><strong>${currentLanguage === "ar" ? "الخدمة" : "Service"}</strong><span>${selectedService ? selectedService[currentLanguage] : (currentLanguage === "ar" ? "غير محددة" : "Not selected")}</span></div><div class="requirement-card"><strong>${currentLanguage === "ar" ? "نوع التأشيرة" : "Visa type"}</strong><span>${guide?.type?.[currentLanguage] || visaType[currentLanguage]}</span></div><div class="requirement-card"><strong>${currentLanguage === "ar" ? "الموافقة الأمنية" : "Security clearance"}</strong><span>${visa.security[currentLanguage]}</span></div><div class="requirement-card"><strong>${currentLanguage === "ar" ? "السعر" : "Price"}</strong><span>${displayedPrice}</span></div><div class="requirement-card"><strong>${currentLanguage === "ar" ? "مدة التنفيذ" : "Processing time"}</strong><span>${guide?.time?.[currentLanguage] || visa.time[currentLanguage]}</span></div>${details}`;
+    }
+
+    fillNationalities();
+    fillServices();
+    destinationSelect.addEventListener("change", () => { fillServices(); renderRequirements(); });
+    serviceSelect.addEventListener("change", () => { fillServices(); renderRequirements(); });
+    birthYearInput.addEventListener("input", renderRequirements);
+    wizard.querySelectorAll("[data-next-step]").forEach((button) => button.addEventListener("click", () => {
+        if (Number(button.dataset.nextStep) === 2 && (!destinationSelect.value || !nationalitySelect.value || !serviceSelect.value || (birthYearInput.required && !birthYearInput.value))) {
+            status.textContent = language() === "ar" ? "اختر الوجهة والجنسية والخدمة أولاً." : "Choose a destination, nationality, and service first.";
+            return;
+        }
+        renderRequirements();
+        showStep(Number(button.dataset.nextStep));
+    }));
+    wizard.querySelectorAll("[data-prev-step]").forEach((button) => button.addEventListener("click", () => showStep(Number(button.dataset.prevStep))));
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        status.textContent = language() === "ar" ? "جاري تسجيل الطلب ورفع الأوراق..." : "Registering your request and uploading documents...";
+        const payload = new FormData(form);
+        payload.append("destination", destinationSelect.value);
+        payload.append("nationality", nationalitySelect.value);
+        payload.append("service", serviceSelect.value);
+        if (birthYearInput.value) payload.append("birthYear", birthYearInput.value);
+        payload.append("language", language());
+        try {
+            const response = await fetch("/api/visa-orders", { method: "POST", body: payload });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || "Request failed");
+            document.getElementById("visa-order-id").textContent = result.orderId;
+            const message = language() === "ar" ? `مرحباً ريدستار، أريد تأكيد دفع طلب التأشيرة رقم ${result.orderId}.` : `Hello RedStar, I want to confirm payment for visa order ${result.orderId}.`;
+            document.getElementById("visa-whatsapp-confirm").href = `https://wa.me/${REDSTAR_WHATSAPP}?text=${encodeURIComponent(message)}`;
+            showStep(4);
+        } catch (error) {
+            status.textContent = language() === "ar" ? "تعذر تسجيل الطلب. تأكد من الاتصال وحاول مرة أخرى." : "The request could not be registered. Check your connection and try again.";
+        }
+    });
+}
+
 // 4. معالجة نموذج صفحة Contact
 function handleContactForm(e) {
     if (e) e.preventDefault();
@@ -1039,6 +1305,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadReviews();
     markHiddenVisit();
     startDestinationSlideshows();
+    setupVisaWizard();
 
 });
 function loadEnvFile(filePath) {

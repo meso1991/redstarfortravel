@@ -37,6 +37,62 @@
         </section>
 
         <section class="section">
+            <div class="container">
+                <div class="section-head visa-wizard-heading">
+                    <div>
+                        <span class="kicker" data-i18n="visa_apply_kicker">Visa application</span>
+                        <h2 data-i18n="visa_apply_title">Complete your visa request in four steps</h2>
+                    </div>
+                    <p data-i18n="visa_apply_text">Choose your destination, review the requirements, upload your documents, then confirm your request on WhatsApp.</p>
+                </div>
+
+                <div class="visa-wizard" id="visa-wizard">
+                    <div class="wizard-progress" aria-label="Visa application progress">
+                        <div class="wizard-step active" data-wizard-step="1"><span>1</span><strong data-i18n="visa_step_destination">Destination</strong></div>
+                        <div class="wizard-step" data-wizard-step="2"><span>2</span><strong data-i18n="visa_step_requirements">Requirements</strong></div>
+                        <div class="wizard-step" data-wizard-step="3"><span>3</span><strong data-i18n="visa_step_details">Your details</strong></div>
+                        <div class="wizard-step" data-wizard-step="4"><span>4</span><strong data-i18n="visa_step_confirmation">Confirmation</strong></div>
+                    </div>
+
+                    <div class="wizard-panel active" data-wizard-panel="1">
+                        <h3 data-i18n="visa_step1_title">Where are you travelling?</h3>
+                        <p class="wizard-muted" data-i18n="visa_step1_text">Select your destination and nationality to see the relevant starting requirements.</p>
+                        <div class="form-grid wizard-form-grid">
+                            <label class="input-box"><span data-i18n="visa_destination_label">Destination</span><select id="visa-destination" required><option value="" data-i18n="visa_destination_placeholder">Choose a destination</option></select></label>
+                            <label class="input-box"><span data-i18n="visa_nationality_label">Nationality</span><select id="visa-nationality" required><option value="" data-i18n="visa_nationality_placeholder">Choose your nationality</option></select></label>
+                            <label class="input-box full"><span data-i18n="visa_service_label">Visa service</span><select id="visa-service" required disabled><option value="" data-i18n="visa_service_placeholder">Choose a destination first</option></select></label>
+                            <label class="input-box full" id="visa-birth-year-box" hidden><span data-i18n="visa_birth_year_label">Applicant birth year as shown on the document</span><input id="visa-birth-year" type="number" min="1900" max="2026" inputmode="numeric"><small class="field-help" data-i18n="visa_birth_year_help">The price will appear after you enter the birth year.</small></label>
+                        </div>
+                        <button class="button button-primary wizard-next" type="button" data-next-step="2" data-i18n="visa_continue">Continue</button>
+                    </div>
+
+                    <div class="wizard-panel" data-wizard-panel="2" hidden>
+                        <div class="wizard-panel-heading"><div><h3 data-i18n="visa_step2_title">Review the requirements</h3><p class="wizard-muted" data-i18n="visa_step2_text">Check the visa route, documents, cost, and expected processing time.</p></div><button class="wizard-back" type="button" data-prev-step="1" data-i18n="visa_back">Back</button></div>
+                        <div class="visa-requirements" id="visa-requirements"></div>
+                        <button class="button button-primary wizard-next" type="button" data-next-step="3" data-i18n="visa_continue_form">Continue to application</button>
+                    </div>
+
+                    <div class="wizard-panel" data-wizard-panel="3" hidden>
+                        <div class="wizard-panel-heading"><div><h3 data-i18n="visa_step3_title">Applicant details and documents</h3><p class="wizard-muted" data-i18n="visa_step3_text">Your files are sent to the local server with the order and are not exposed as public website files.</p></div><button class="wizard-back" type="button" data-prev-step="2" data-i18n="visa_back">Back</button></div>
+                        <form id="visa-order-form" class="form-grid wizard-form-grid" enctype="multipart/form-data">
+                            <label class="input-box"><span data-i18n="visa_name_label">Full name</span><input id="visa-name" name="name" required maxlength="100" autocomplete="name"></label>
+                            <label class="input-box"><span data-i18n="visa_phone_label">Phone / WhatsApp</span><input id="visa-phone" name="phone" type="tel" required maxlength="30" autocomplete="tel"></label>
+                            <label class="input-box"><span data-i18n="visa_address_label">Address</span><input id="visa-address" name="address" required maxlength="180" autocomplete="street-address"></label>
+                            <label class="input-box"><span data-i18n="visa_passport_label">Passport image</span><input name="passport" type="file" accept="image/jpeg,image/png,application/pdf" required></label>
+                            <label class="input-box full"><span data-i18n="visa_notes_label">Additional notes</span><textarea name="notes" rows="3" maxlength="500"></textarea></label>
+                            <div class="full wizard-form-actions"><button class="wizard-back" type="button" data-prev-step="2" data-i18n="visa_back">Back</button><button class="button button-primary" type="submit" data-i18n="visa_submit">Send visa application</button></div>
+                            <p class="wizard-status full" id="visa-order-status" role="status"></p>
+                        </form>
+                    </div>
+
+                    <div class="wizard-panel" data-wizard-panel="4" hidden>
+                        <div class="wizard-success"><span class="success-icon">✓</span><h3 data-i18n="visa_step4_title">Your request is registered</h3><p data-i18n="visa_step4_text">Keep this order number. Send it on WhatsApp so our team can match your documents and confirm payment.</p><strong class="order-id" id="visa-order-id"></strong><a class="button button-primary" id="visa-whatsapp-confirm" href="#" target="_blank" rel="noopener" data-i18n="visa_whatsapp_confirm">Contact WhatsApp to confirm payment</a></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section-compact">
             <div class="container visa-overview-grid">
                 <article class="visa-card">
                     <img src="../assets/images/destinations/saudi/image1.webp" data-slideshow-folder="saudi" data-slideshow-count="8" alt="Saudi visa service">
@@ -85,6 +141,6 @@
         </div>
     </footer>
 
-    <script src="../js/main.js"></script>
+    <script src="../js/main.js?v=20260903-visa"></script>
 </body>
 </html>

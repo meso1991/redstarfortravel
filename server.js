@@ -1,6 +1,8 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
+const Busboy = require("busboy");
 const { URL } = require("url");
 
 loadEnvFile(path.join(__dirname, ".env"));
@@ -8,6 +10,8 @@ loadEnvFile(path.join(__dirname, ".env"));
 const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
 const STATS_FILE = path.join(ROOT, "data", "site-stats.json");
+const VISA_ORDERS_DIR = path.join(ROOT, "data", "visa-orders");
+const VISA_RETENTION_MS = 20 * 24 * 60 * 60 * 1000;
 
 const MIME_TYPES = {
     ".html": "text/html; charset=utf-8",
@@ -134,6 +138,48 @@ function writeSiteStats(stats) {
     fs.writeFileSync(STATS_FILE, JSON.stringify(stats, null, 2), "utf8");
 }
 
+function removeExpiredVisaOrders() {
+    if (!fs.existsSync(VISA_ORDERS_DIR)) {
+        return;
+    }
+
+    const cutoff = Date.now() - VISA_RETENTION_MS;
+    const orderNames = fs.readdirSync(VISA_ORDERS_DIR);
+
+    orderNames.forEach((orderName) => {
+        const orderDir = path.join(VISA_ORDERS_DIR, orderName);
+        let stats;
+
+        try {
+            stats = fs.statSync(orderDir);
+        } catch (error) {
+            return;
+        }
+
+        if (!stats.isDirectory()) {
+            return;
+        }
+
+        let createdAt = stats.mtimeMs;
+        const orderFile = path.join(orderDir, "order.json");
+
+        try {
+            const order = JSON.parse(fs.readFileSync(orderFile, "utf8"));
+            const orderDate = Date.parse(order.createdAt);
+            if (!Number.isNaN(orderDate)) {
+                createdAt = orderDate;
+            }
+        } catch (error) {
+            createdAt = stats.mtimeMs;
+        }
+
+        if (createdAt < cutoff) {
+            fs.rmSync(orderDir, { recursive: true, force: true });
+            console.log(`Deleted expired visa order: ${orderName}`);
+        }
+    });
+}
+
 function readRequestBody(req) {
     return new Promise((resolve, reject) => {
         let body = "";
@@ -190,6 +236,84 @@ async function handleSiteStats(req, res) {
 
     res.writeHead(405, { "Allow": "GET, POST" });
     res.end();
+}
+
+function handleVisaOrder(req, res) {
+    return new Promise((resolve) => {
+        const orderId = `RS-${new Date().toISOString().slice(0, 10).replace(/-/g, "")}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
+        const orderDir = path.join(VISA_ORDERS_DIR, orderId);
+        const fields = {};
+        const savedFiles = [];
+        const pendingFiles = [];
+        let failed = false;
+
+        const fail = (message) => {
+            if (failed) return;
+            failed = true;
+            savedFiles.forEach((filePath) => fs.rmSync(filePath, { force: true }));
+            fs.rmSync(orderDir, { recursive: true, force: true });
+            sendJson(res, 400, { error: message });
+            resolve();
+        };
+
+        let parser;
+        try {
+            parser = Busboy({ headers: req.headers, limits: { fileSize: 10 * 1024 * 1024, files: 2, fields: 12 } });
+        } catch (error) {
+            fail("Invalid upload request.");
+            return;
+        }
+
+        parser.on("field", (name, value) => {
+            fields[name] = String(value).trim().slice(0, 500);
+        });
+        parser.on("file", (name, file, info) => {
+            if (name !== "passport") {
+                file.resume();
+                fail("Unexpected document field.");
+                return;
+            }
+            const allowed = ["image/jpeg", "image/png", "application/pdf"];
+            if (!allowed.includes(info.mimeType)) {
+                file.resume();
+                fail("Unsupported document type.");
+                return;
+            }
+            fs.mkdirSync(orderDir, { recursive: true });
+            const extension = path.extname(info.filename).toLowerCase().replace(/[^a-z0-9.]/g, "") || ".bin";
+            const filePath = path.join(orderDir, `${name}${extension}`);
+            const output = fs.createWriteStream(filePath, { flags: "wx" });
+            savedFiles.push(filePath);
+            pendingFiles.push(new Promise((resolve) => output.on("close", resolve)));
+            file.on("limit", () => fail("Each document must be 10 MB or smaller."));
+            file.on("error", () => fail("Could not receive the uploaded document."));
+            output.on("error", () => fail("Could not save the uploaded document."));
+            file.pipe(output);
+        });
+        parser.on("error", () => fail("Could not read the application form."));
+        parser.on("finish", async () => {
+            if (failed) return;
+            await Promise.all(pendingFiles);
+            if (failed) return;
+            const required = ["name", "phone", "address", "destination", "nationality", "service"];
+            if (required.some((field) => !fields[field])) {
+                fail("Name, phone, city, address, destination, and nationality are required.");
+                return;
+            }
+            if (savedFiles.length !== 1) {
+                fail("A passport image is required.");
+                return;
+            }
+            if (fields.destination === "saudi" && fields.service === "family_visit_khartoum" && (!fields.birthYear || !/^(19|20)\d{2}$/.test(fields.birthYear))) {
+                fail("A valid birth year is required for this Saudi family visit route.");
+                return;
+            }
+            fs.writeFileSync(path.join(orderDir, "order.json"), JSON.stringify({ orderId, createdAt: new Date().toISOString(), ...fields, files: savedFiles.map((filePath) => path.basename(filePath)) }, null, 2));
+            sendJson(res, 201, { orderId });
+            resolve();
+        });
+        req.pipe(parser);
+    });
 }
 
 function sendFile(res, filePath) {
@@ -615,9 +739,16 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
+    if (reqUrl.pathname === "/api/visa-orders" && req.method === "POST") {
+        await handleVisaOrder(req, res);
+        return;
+    }
+
     handleStatic(reqUrl, res);
 });
 
 server.listen(PORT, () => {
+    removeExpiredVisaOrders();
+    setInterval(removeExpiredVisaOrders, 24 * 60 * 60 * 1000).unref();
     console.log(`RedStar Travel server running at http://localhost:${PORT}`);
 });
