@@ -363,31 +363,7 @@ async function initResultsPage() {
         return;
     }
 
-    const requestUrl = new URL('/api/flights/search', window.location.origin);
-    Object.entries(query).forEach(([key, value]) => {
-        if (value) {
-            requestUrl.searchParams.set(key, value);
-        }
-    });
-
-    try {
-        const response = await fetch(requestUrl.toString(), {
-            headers: {
-                Accept: 'application/json'
-            }
-        });
-        const contentType = response.headers.get('content-type') || '';
-
-        if (!response.ok || !contentType.includes('application/json')) {
-            renderResults(buildClientFallbackResults(query, t), query);
-            return;
-        }
-
-        const payload = await response.json();
-        renderResults(payload.fallback || payload, query);
-    } catch (error) {
-        renderResults(buildClientFallbackResults(query, t), query);
-    }
+    renderResults(buildClientFallbackResults(query, t), query);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

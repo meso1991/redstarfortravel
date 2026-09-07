@@ -11,7 +11,6 @@ const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
 const STATS_FILE = path.join(ROOT, "data", "site-stats.json");
 const VISA_ORDERS_DIR = path.join(ROOT, "data", "visa-orders");
-const VISA_RETENTION_MS = 20 * 24 * 60 * 60 * 1000;
 
 const MIME_TYPES = {
     ".html": "text/html; charset=utf-8",
@@ -136,48 +135,6 @@ function readSiteStats() {
 function writeSiteStats(stats) {
     fs.mkdirSync(path.dirname(STATS_FILE), { recursive: true });
     fs.writeFileSync(STATS_FILE, JSON.stringify(stats, null, 2), "utf8");
-}
-
-function removeExpiredVisaOrders() {
-    if (!fs.existsSync(VISA_ORDERS_DIR)) {
-        return;
-    }
-
-    const cutoff = Date.now() - VISA_RETENTION_MS;
-    const orderNames = fs.readdirSync(VISA_ORDERS_DIR);
-
-    orderNames.forEach((orderName) => {
-        const orderDir = path.join(VISA_ORDERS_DIR, orderName);
-        let stats;
-
-        try {
-            stats = fs.statSync(orderDir);
-        } catch (error) {
-            return;
-        }
-
-        if (!stats.isDirectory()) {
-            return;
-        }
-
-        let createdAt = stats.mtimeMs;
-        const orderFile = path.join(orderDir, "order.json");
-
-        try {
-            const order = JSON.parse(fs.readFileSync(orderFile, "utf8"));
-            const orderDate = Date.parse(order.createdAt);
-            if (!Number.isNaN(orderDate)) {
-                createdAt = orderDate;
-            }
-        } catch (error) {
-            createdAt = stats.mtimeMs;
-        }
-
-        if (createdAt < cutoff) {
-            fs.rmSync(orderDir, { recursive: true, force: true });
-            console.log(`Deleted expired visa order: ${orderName}`);
-        }
-    });
 }
 
 function readRequestBody(req) {
@@ -748,7 +705,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-    removeExpiredVisaOrders();
-    setInterval(removeExpiredVisaOrders, 24 * 60 * 60 * 1000).unref();
     console.log(`RedStar Travel server running at http://localhost:${PORT}`);
 });

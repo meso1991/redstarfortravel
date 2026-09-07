@@ -55,7 +55,7 @@ const VISA_GUIDES = {
     },
     saudi: {
         family_visit_cairo: { type: { ar: "تأشيرة إلكترونية", en: "Electronic Visa" }, price: { ar: "11,500 جنيه مصري", en: "EGP 11,500" }, time: { ar: "تحدد بعد مراجعة الملف", en: "Confirmed after file review" }, sections: [{ title: { ar: "جهة التقديم: القاهرة", en: "Application point: Cairo" }, items: { ar: ["صورة مستند تأشيرة الزيارة العائلية المعتمد من وزارة الخارجية السعودية متضمنًا رقم التأشيرة.", "صورة هوية مقيم سارية وصورة جواز سفر المقيم في السعودية.", "أصل جواز السفر لكل مسافر، ساري 6 أشهر ويحتوي على صفحات فارغة.", "صورتان شخصيتان حديثتان لكل فرد، خلفية بيضاء، مقاس 4×6.", "إثبات صلة القرابة موثق حسب الحالة: قسيمة الزواج أو الرقم الوطني، من السفارة السودانية ووزارة الخارجية المصرية."] , en: ["Approved family visit visa document from the Saudi Foreign Ministry, including the visa number.", "Valid resident ID and passport copy of the Saudi resident.", "Original passport for each traveler, valid for 6 months with blank pages.", "Two recent white-background photos per person, size 4×6.", "Certified proof of relationship, as applicable, through the Sudanese Embassy and Egyptian Foreign Ministry."] } }] },
-        family_visit_khartoum: { type: { ar: "تأشيرة إلكترونية", en: "Electronic Visa" }, price: { ar: "1966-2026: 750 ريال | 1956-1965: 800 ريال | 1955 وما دون: 1,000 ريال", en: "1966-2026: SAR 750 | 1956-1965: SAR 800 | 1955 and earlier: SAR 1,000" }, time: { ar: "7-10 أيام عمل", en: "7-10 business days" }, sections: [{ title: { ar: "جهة التقديم: الخرطوم", en: "Application point: Khartoum" }, items: { ar: ["صورة مستند تأشيرة الزيارة العائلية بعد اعتماده من وزارة الخارجية السعودية.", "يجب أن تكون جهة القدوم المحددة بورتسودان.", "صورة محدثة من هوية مقيم وصورة جواز السفر.", "أصل الجواز الإلكتروني لكل فرد، ساري 6 أشهر ويحتوي على صفحات فارغة.", "صورتان حديثتان لكل شخص، خلفية بيضاء، مقاس 4×6.", "إثبات صلة القرابة موثق من وزارة الخارجية السودانية: الزواج أو شهادة الميلاد أو الرقم الوطني."] , en: ["Approved family visit visa document from the Saudi Foreign Ministry.", "The selected arrival point must be Port Sudan.", "Updated resident ID and passport copies.", "Original electronic passport for each person, valid for 6 months with blank pages.", "Two recent white-background photos per person, size 4×6.", "Proof of relationship certified by the Sudanese Foreign Ministry: marriage, birth certificate, or national ID."] } }] },
+        family_visit_khartoum: { type: { ar: "تأشيرة إلكترونية", en: "Electronic Visa" }, price: { ar: "1966-2026: 750 ريال | 1956-1965: 800 ريال | 1955 وما دون: 1,000 ريال", en: "1966-2026: SAR 750 | 1956-1965: SAR 800 | 1955 and earlier: SAR 1,000" }, time: { ar: "7-10 أيام عمل", en: "7-10 business days" }, sections: [{ title: { ar: "جهة التقديم: الخرطوم", en: "Application point: Khartoum" }, items: { ar: ["صورة مستند تأشيرة الزيارة العائلية بعد اعتماده من وزارة الخارجية السعودية.", "يجب أن تكون جهة القدوم المحددة الخرطوم.", "صورة محدثة من هوية مقيم وصورة جواز السفر.", "أصل الجواز الإلكتروني لكل فرد، ساري 6 أشهر ويحتوي على صفحات فارغة.", "صورتان حديثتان لكل شخص، خلفية بيضاء، مقاس 4×6.", "إثبات صلة القرابة موثق من وزارة الخارجية السودانية: قسيمة الزواج أو شهادة الميلاد أو الرقم الوطني."] , en: ["Approved family visit visa document from the Saudi Foreign Ministry.", "The selected arrival point must be Khartoum.", "Updated resident ID and passport copies.", "Original electronic passport for each person, valid for 6 months with blank pages.", "Two recent white-background photos per person, size 4×6.", "Proof of relationship certified by the Sudanese Foreign Ministry: marriage certificate, birth certificate, or national ID."] } }] },
         tourist_gcc: { type: { ar: "تأشيرة إلكترونية", en: "Electronic Visa" }, price: { ar: "يحدد بعد مراجعة الملف", en: "Confirmed after file review" }, time: { ar: "5-10 أيام عمل", en: "5-10 business days" }, sections: [{ title: { ar: "المتطلبات", en: "Requirements" }, items: { ar: ["جواز سفر ساري لمدة 6 أشهر.", "صورة شخصية بخلفية بيضاء.", "إثبات الإقامة في دول الخليج."], en: ["Passport valid for 6 months.", "White-background personal photo.", "Proof of GCC residency."] } }] },
         residence: { type: { ar: "تأشيرة إلكترونية", en: "Electronic Visa" }, price: { ar: "يحدد بعد مراجعة الملف", en: "Confirmed after file review" }, time: { ar: "يحدد بعد مراجعة الملف", en: "Confirmed after file review" }, sections: [{ title: { ar: "المتطلبات", en: "Requirements" }, items: { ar: ["جواز سفر ساري.", "صورة شخصية.", "مستندات الإقامة أو العمل حسب الحالة."], en: ["Valid passport.", "Personal photo.", "Residence or employment documents, as applicable."] } }] },
         umrah: { type: { ar: "تأشيرة إلكترونية", en: "Electronic Visa" }, price: { ar: "يحدد بعد مراجعة الملف", en: "Confirmed after file review" }, time: { ar: "يحدد حسب الموسم", en: "Depends on the season" }, sections: [{ title: { ar: "المتطلبات", en: "Requirements" }, items: { ar: ["جواز سفر ساري لمدة 6 أشهر.", "صورة شخصية بخلفية بيضاء.", "بيانات الرحلة والسكن."], en: ["Passport valid for 6 months.", "White-background personal photo.", "Travel and accommodation details."] } }] }
@@ -107,8 +107,11 @@ const translations = {
         dir: "rtl",
         nav_home: "الرئيسية",
         nav_about: "من نحن",
+        nav_visa: "التأشيرات",
         nav_services: "خدماتنا",
         nav_contact: "تواصل معنا",
+        nav_privacy: "سياسة الخصوصية",
+        nav_terms: "الشروط والأحكام",
         nav_our_work: "أعمالنا",
         hero_eyebrow: "وكالة ريدستار للسياحة والسفر",
         hero_title: "انطلق أبعد مع شريك سفر موثوق ومحترف.",
@@ -344,7 +347,7 @@ const translations = {
         // visa/visa.html
         visa_dir_hero_eyebrow: "دليل التأشيرات",
         visa_dir_hero_title: "اختر وجهة التأشيرة وانتقل مباشرة إلى التفاصيل الصحيحة.",
-        visa_dir_hero_text: "تصفح صفحات الدول للاطلاع على المتطلبات وملاحظات الخدمة وإجراءات الاستفسار المباشر عبر ريدستار.",
+        visa_dir_hero_text: "تصفح صفحات الدول للاطلاع على المتطلبات، ملاحظات الخدمة، وإجراءات الاستفسار المباشر عبر ريدستار.",
         visa_apply_kicker: "طلب تأشيرة",
         visa_apply_title: "أكمل طلب التأشيرة في أربع خطوات",
         visa_apply_text: "اختر الوجهة، راجع المتطلبات، ارفع المستندات، ثم أكد طلبك عبر واتساب.",
@@ -368,7 +371,7 @@ const translations = {
         visa_back: "رجوع",
         visa_continue_form: "متابعة إلى الطلب",
         visa_step3_title: "بيانات المسافر والمستندات",
-        visa_step3_text: "تُرسل ملفاتك إلى السيرفر المحلي مع الطلب ولا تظهر كملفات عامة على الموقع.",
+        visa_step3_text: "تُرسل ملفاتك إلى الخادم المحلي مع الطلب، ولا تظهر كملفات عامة على الموقع.",
         visa_name_label: "الاسم بالكامل",
         visa_phone_label: "الهاتف / واتساب",
         visa_city_label: "المدينة",
@@ -394,16 +397,16 @@ const translations = {
 
         // visa/saudi.html
         saudi_hero_eyebrow: "المملكة العربية السعودية",
-        saudi_hero_title: "دعم لرحلات الزيارة والرحلات العائلية والرحلات الدينية.",
-        saudi_hero_text: "تساعدك ريدستار في توجيه استفسارك نحو فئة السفر السعودية الصحيحة حتى تجهز المستندات الصحيحة مبكراً.",
+        saudi_hero_title: "دعم لرحلات الزيارة، والرحلات العائلية، والرحلات الدينية.",
+        saudi_hero_text: "تساعدك ريدستار في توجيه استفسارك إلى فئة السفر السعودية المناسبة، حتى تجهز المستندات المطلوبة في وقت مبكر.",
         saudi_family_title: "زيارة عائلية",
         saudi_family_egypt: "من مصر: 10,500 جنيه مصري",
         saudi_family_sudan: "من السودان: 950,000 جنيه سوداني",
         saudi_umrah_title: "عمرة",
         saudi_umrah_text: "سيتم فتح باب التقديم بعد موسم الحج.",
         saudi_tourist_title: "زيارة سياحية لمقيمي دول الخليج",
-        saudi_tourist_req_1: "نسخة جواز سفر سارية لمدة 6 أشهر",
-        saudi_tourist_req_2: "نسخة هوية أو إقامة سارية",
+        saudi_tourist_req_1: "نسخة من جواز سفر ساري لمدة 6 أشهر",
+        saudi_tourist_req_2: "نسخة من بطاقة الهوية أو الإقامة السارية",
         saudi_tourist_req_3: "صورة شخصية بخلفية بيضاء",
         saudi_tourist_price: "السعر: 600 درهم إماراتي",
         need_help: "محتاج مساعدة في استفسار تأشيرة السعودية؟",
@@ -414,7 +417,7 @@ const translations = {
         // visa/uae.html
         uae_hero_eyebrow: "تأشيرة الإمارات",
         uae_hero_title: "دعم مرن لتأشيرة الإمارات السياحية لمختلف ملفات المسافرين.",
-        uae_hero_text: "مناسبة للمسافرين المخططين لإقامات ترفيهية قصيرة، زيارات عائلية، أو سفر عبر منطقة الخليج.",
+        uae_hero_text: "مناسب للمسافرين المخططين لإقامات قصيرة، زيارات عائلية، أو سفر عبر منطقة الخليج.",
         uae_month_title: "تأشيرة شهر واحد",
         uae_month_adult: "بالغ: 650 درهم",
         uae_month_child: "طفل: 300 درهم",
@@ -433,14 +436,14 @@ const translations = {
         uae_doc_1: "نسخة جواز سفر سارية لمدة 6 أشهر",
         uae_doc_2: "صورة شخصية",
         uae_terms_title: "الشروط والأحكام",
-        uae_terms_text: "في حال تجاوز المسافر مدة الإقامة أو مخالفة شروط التأشيرة، يتحمل الوكيل رسوم بلاغ هروب بقيمة 3500 درهم بالإضافة إلى أي غرامات ذات صلة.",
+        uae_terms_text: "إذا تجاوز المسافر مدة الإقامة أو خالف شروط التأشيرة، يتحمل الوكيل رسوم بلاغ هروب بقيمة 3500 درهم، بالإضافة إلى أي غرامات ذات صلة.",
         ready_uae: "جاهز للاستفسار عن تأشيرة الإمارات؟",
         ready_uae_text: "أرسل استفسارك مباشرة لريدستار وسنرشدك للخيار الصحيح حسب ملف سفرك.",
 
         // visa/egypt.html
         egypt_hero_eyebrow: "دعم السفر إلى مصر",
-        egypt_hero_title: "دعم سريع للموافقة الأمنية على مصر عندما يكون الوقت مهماً.",
-        egypt_hero_text: "استخدم ريدستار للمتابعة الموجهة لدعم السفر المتعلق بمصر، خاصة عندما يحتاج المسافرون مساراً سريعاً ومستندات واضحة.",
+        egypt_hero_title: "دعم سريع للموافقة الأمنية الخاصة بمصر عندما يكون الوقت مهمًا.",
+        egypt_hero_text: "استخدم ريدستار للمتابعة الموجهة لدعم السفر المتعلق بمصر، خاصة عندما يحتاج المسافرون إلى مسار سريع ومستندات واضحة.",
         egypt_requirements_title: "المتطلبات",
         egypt_req_1: "جواز سفر ساري لمدة 6 أشهر",
         egypt_req_2: "وجهة الوصول",
@@ -454,8 +457,8 @@ const translations = {
 
         // visa/africa.html
         africa_hero_eyebrow: "دعم تأشيرات أفريقيا",
-        africa_hero_title: "وجهات أفريقية مختارة مع إرشاد سريع للمتطلبات.",
-        africa_hero_text: "استخدم هذه الصفحة كنقطة بداية للاطلاع على لمحة الأسعار وملاحظات المتطلبات الأساسية قبل إرسال استفسارك لريدستار.",
+        africa_hero_title: "وجهات أفريقية مختارة مع إرشادات سريعة للمتطلبات.",
+        africa_hero_text: "استخدم هذه الصفحة كنقطة بداية للاطلاع على لمحة الأسعار وملاحظات المتطلبات الأساسية قبل إرسال استفسارك إلى ريدستار.",
         tanzania_country: "تنزانيا",
         requirements_label: "المتطلبات",
         req_passport_photo: "نسخة جواز سفر + صورة شخصية",
@@ -481,8 +484,11 @@ const translations = {
         dir: "ltr",
         nav_home: "Home",
         nav_about: "About",
+        nav_visa: "Visas",
         nav_services: "Services",
         nav_contact: "Contact",
+        nav_privacy: "Privacy Policy",
+        nav_terms: "Terms & Conditions",
         nav_our_work: "Our Work",
         hero_eyebrow: "RedStar Premium Travel Desk",
         hero_title: "Explore farther with a sharper travel partner.",
@@ -1079,26 +1085,52 @@ function setupVisaWizard() {
     }));
     wizard.querySelectorAll("[data-prev-step]").forEach((button) => button.addEventListener("click", () => showStep(Number(button.dataset.prevStep))));
 
-    form.addEventListener("submit", async (event) => {
+    form.addEventListener("submit", (event) => {
         event.preventDefault();
-        status.textContent = language() === "ar" ? "جاري تسجيل الطلب ورفع الأوراق..." : "Registering your request and uploading documents...";
-        const payload = new FormData(form);
-        payload.append("destination", destinationSelect.value);
-        payload.append("nationality", nationalitySelect.value);
-        payload.append("service", serviceSelect.value);
-        if (birthYearInput.value) payload.append("birthYear", birthYearInput.value);
-        payload.append("language", language());
-        try {
-            const response = await fetch("/api/visa-orders", { method: "POST", body: payload });
-            const result = await response.json();
-            if (!response.ok) throw new Error(result.error || "Request failed");
-            document.getElementById("visa-order-id").textContent = result.orderId;
-            const message = language() === "ar" ? `مرحباً ريدستار، أريد تأكيد دفع طلب التأشيرة رقم ${result.orderId}.` : `Hello RedStar, I want to confirm payment for visa order ${result.orderId}.`;
-            document.getElementById("visa-whatsapp-confirm").href = `https://wa.me/${REDSTAR_WHATSAPP}?text=${encodeURIComponent(message)}`;
-            showStep(4);
-        } catch (error) {
-            status.textContent = language() === "ar" ? "تعذر تسجيل الطلب. تأكد من الاتصال وحاول مرة أخرى." : "The request could not be registered. Check your connection and try again.";
-        }
+
+        const currentLanguage = language();
+        const selectedVisa = VISA_DESTINATIONS[destinationSelect.value];
+        const selectedService = VISA_SERVICES[destinationSelect.value]?.find((service) => service.value === serviceSelect.value);
+        const phone = document.getElementById("visa-phone")?.value?.trim() || "";
+        const email = document.getElementById("visa-email")?.value?.trim() || "";
+        const notes = document.getElementById("visa-notes")?.value?.trim() || "";
+
+        const message = currentLanguage === "ar"
+            ? `*طلب تأشيرة جديد (RedStar Travel)* 📄\n\n• *الوجهة:* ${selectedVisa?.ar || destinationSelect.value}\n• *الخدمة:* ${selectedService?.ar || serviceSelect.value}\n• *الجنسية:* ${nationalitySelect.options[nationalitySelect.selectedIndex]?.text || "-"}\n${phone ? `• *الهاتف:* ${phone}\n` : ""}${email ? `• *البريد:* ${email}\n` : ""}${birthYearInput.value ? `• *سنة الميلاد:* ${birthYearInput.value}\n` : ""}${notes ? `• *ملاحظات:* ${notes}\n` : ""}\n_أرجو تزويدي بالمتطلبات والأسعار ومدة التنفيذ._`
+            : `*New Visa Request (RedStar Travel)* 📄\n\n• *Destination:* ${selectedVisa?.en || destinationSelect.value}\n• *Service:* ${selectedService?.en || serviceSelect.value}\n• *Nationality:* ${nationalitySelect.options[nationalitySelect.selectedIndex]?.text || "-"}\n${phone ? `• *Phone:* ${phone}\n` : ""}${email ? `• *Email:* ${email}\n` : ""}${birthYearInput.value ? `• *Birth year:* ${birthYearInput.value}\n` : ""}${notes ? `• *Notes:* ${notes}\n` : ""}\n_Please send me the requirements, prices, and processing time._`;
+
+        status.textContent = currentLanguage === "ar"
+            ? "تم تجهيز الطلب. ستفتح محادثة واتساب الآن..."
+            : "Your request is ready. WhatsApp chat is opening now...";
+
+        openWhatsAppMessage(message);
+    });
+}
+
+function removeDeletedPageLinks() {
+    document.querySelectorAll('a[href="africa.html"], a[href="uae.html"]').forEach((link) => link.remove());
+}
+
+function ensurePolicyNavigation() {
+    document.querySelectorAll(".nav-links").forEach((nav) => {
+        const prefix = window.location.pathname.includes("/visa/") ? "../" : "";
+        const switcher = nav.querySelector(".lang-switcher");
+        const links = [
+            { href: `${prefix}index.html`, key: "nav_home" },
+            { href: `${prefix === "../" ? "" : "visa/"}visa.html`, key: "nav_visa" },
+            { href: `${prefix}privacy.html`, key: "nav_privacy" },
+            { href: `${prefix}terms.html`, key: "nav_terms" }
+        ];
+
+        links.forEach(({ href, key }) => {
+            if (nav.querySelector(`a[href="${href}"]`)) return;
+            const link = document.createElement("a");
+            link.href = href;
+            link.dataset.i18n = key;
+            link.textContent = translations[localStorage.getItem("redstar_lang") || "ar"][key];
+            if (switcher) nav.insertBefore(link, switcher);
+            else nav.appendChild(link);
+        });
     });
 }
 
@@ -1179,15 +1211,8 @@ function startDestinationSlideshows() {
 
 // عند تحميل الصفحة
 async function markHiddenVisit() {
-    try {
-        await fetch("/api/site-stats", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ type: "visit" })
-        });
-    } catch (error) {
-        // Silent fail: static deployments do not have a backend counter by default.
-    }
+    // This website uses WhatsApp-based requests only.
+    // No backend analytics API is required or available.
 }
 
 function getStoredReviews() {
@@ -1289,6 +1314,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentYearElem) currentYearElem.textContent = new Date().getFullYear();
 
     const savedLang = localStorage.getItem("redstar_lang") || "ar";
+    ensurePolicyNavigation();
     setLanguage(savedLang);
 
     document.querySelectorAll(".lang-btn").forEach(btn => {
@@ -1305,6 +1331,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadReviews();
     markHiddenVisit();
     startDestinationSlideshows();
+    removeDeletedPageLinks();
     setupVisaWizard();
 
 });

@@ -1,0 +1,21 @@
+{
+  "routes": [
+    {
+      "routePath": "/api/health",
+      "mountPath": "/api",
+      "method": "GET",
+      "module": [
+        "api/health.js:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/api/visa-orders",
+      "mountPath": "/api",
+      "method": "POST",
+      "module": [
+        "api/visa-orders.js:onRequestPost"
+      ]
+    }
+  ],
+  "baseURL": "/"
+}
