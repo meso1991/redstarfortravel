@@ -1,17 +1,22 @@
 {
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "RedStar Travel",
+    "documentationUrl": "https://redstar-travel.com/llms.txt"
+  },
   "entries": [
     {
-      "identifier": "urn:air:redstar-travel.com:website:travel-services",
-      "displayName": "RedStar Travel Website",
-      "type": "text/html",
-      "url": "https://redstar-travel.com/",
-      "description": "Bilingual travel agency website with flight and hotel booking inquiries, visa and entry-support information, and travel service pages.",
+      "identifier": "urn:air:redstar-travel.com:guide:travel-inquiries",
+      "displayName": "RedStar Travel Inquiry Guide",
+      "type": "text/markdown",
+      "url": "https://redstar-travel.com/llms.txt",
+      "description": "A guide to RedStar Travel flight and hotel inquiries, visa information, and contacting the agency. Requests are handled by agency staff; bookings are not completed automatically.",
       "representativeQueries": [
-        "Find flight booking inquiry options from RedStar Travel",
-        "Find hotel booking and visa service information from RedStar Travel",
-        "Contact RedStar Travel about travel services"
+        "How can I ask RedStar Travel about a flight?",
+        "How do I send a hotel booking inquiry to RedStar Travel?",
+        "Where can I find RedStar Travel visa information?"
       ],
-      "tags": ["travel", "flights", "hotels", "visas", "travel-agency"]
+      "tags": ["travel", "flight-inquiries", "hotel-inquiries", "visa-information"]
     }
   ]
 }
