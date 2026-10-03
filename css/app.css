@@ -487,11 +487,13 @@ main {
     align-items: center;
 }
 
-.p-input small {
+.p-input small,
+.p-input label {
     color: var(--muted);
     font-size: 0.72rem;
     text-transform: uppercase;
     font-weight: 800;
+    letter-spacing: normal;
 }
 
 .p-input input {

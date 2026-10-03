@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="وكالة ريد ستار للسفر والسياحة — حجز تذاكر طيران، عمرة، موافقات أمنية لدخول مصر، وبرامج سياحية في القاهرة والإسكندرية. احجز رحلتك بسهولة وموثوقية.">
+    <link rel="ard" href="/.well-known/ard.json" type="application/json">
     <meta name="theme-color" content="#c53b2c">
     <title>RedStar Travel | وكالة ريدستار للسفر والسياحة</title>
     <link rel="icon" href="assets/images/favicon.ico">
@@ -118,9 +119,9 @@
                             <div class="input-box">
                                 <label data-i18n="travelers_label">المسافرون</label>
                                 <div class="passenger-grid">
-                                    <div class="p-input"><small data-i18n="adults">بالغين</small><input type="number" id="adults" value="1" min="1"></div>
-                                    <div class="p-input"><small data-i18n="kids">أطفال</small><input type="number" id="kids" value="0" min="0"></div>
-                                    <div class="p-input"><small data-i18n="infants">رضع</small><input type="number" id="infants" value="0" min="0"></div>
+                                    <div class="p-input"><label for="adults" data-i18n="adults">بالغين</label><input type="number" id="adults" value="1" min="1"></div>
+                                    <div class="p-input"><label for="kids" data-i18n="kids">أطفال</label><input type="number" id="kids" value="0" min="0"></div>
+                                    <div class="p-input"><label for="infants" data-i18n="infants">رضع</label><input type="number" id="infants" value="0" min="0"></div>
                                 </div>
                             </div>
                             <button class="button button-primary search-submit" type="button" onclick="searchFlights()" data-i18n="search_flights_btn">طلب حجز الطيران عبر واتساب</button>
@@ -187,9 +188,9 @@
                             <div class="input-box">
                                 <label data-i18n="rooms_guests_label">الغرف والنزلاء</label>
                                 <div class="passenger-grid">
-                                    <div class="p-input"><small data-i18n="rooms">الغرف</small><input type="number" id="rooms" value="1" min="1"></div>
-                                    <div class="p-input"><small data-i18n="guests">البالغين</small><input type="number" id="guests" value="2" min="1"></div>
-                                    <div class="p-input"><small data-i18n="kids_label">الأطفال</small><input type="number" id="hotel-kids" value="0" min="0"></div>
+                                    <div class="p-input"><label for="rooms" data-i18n="rooms">الغرف</label><input type="number" id="rooms" value="1" min="1"></div>
+                                    <div class="p-input"><label for="guests" data-i18n="guests">البالغين</label><input type="number" id="guests" value="2" min="1"></div>
+                                    <div class="p-input"><label for="hotel-kids" data-i18n="kids_label">الأطفال</label><input type="number" id="hotel-kids" value="0" min="0"></div>
                                 </div>
                             </div>
                             <button class="button button-primary search-submit" type="button" onclick="searchHotels()" data-i18n="search_hotels_btn">طلب حجز الفندق عبر واتساب</button>

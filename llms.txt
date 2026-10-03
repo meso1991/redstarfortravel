@@ -1,0 +1,15 @@
+# RedStar Travel
+
+> RedStar Travel is a bilingual travel agency website serving travelers with flight and hotel booking inquiries, visa and entry-support information, and travel services.
+
+## Main pages
+- [Home](https://redstar-travel.com/): Search flights and hotels and explore travel services.
+- [Flights](https://redstar-travel.com/flights.html): Flight search and booking inquiry information.
+- [Hotels](https://redstar-travel.com/hotels.html): Hotel search and booking inquiry information.
+- [Visa services](https://redstar-travel.com/visa/visa.html): Visa and entry-support service information.
+- [About RedStar Travel](https://redstar-travel.com/about.html): Information about the agency.
+- [Contact](https://redstar-travel.com/contact.html): Contact information and inquiry options.
+
+## Guidance
+- The website provides travel information and inquiry forms. A submitted inquiry is not a confirmed booking or visa approval.
+- For current availability, prices, and requirements, contact the agency using the contact options on the website.

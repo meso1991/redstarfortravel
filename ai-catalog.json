@@ -1,0 +1,17 @@
+{
+  "entries": [
+    {
+      "identifier": "urn:air:redstar-travel.com:website:travel-services",
+      "displayName": "RedStar Travel Website",
+      "type": "text/html",
+      "url": "https://redstar-travel.com/",
+      "description": "Bilingual travel agency website with flight and hotel booking inquiries, visa and entry-support information, and travel service pages.",
+      "representativeQueries": [
+        "Find flight booking inquiry options from RedStar Travel",
+        "Find hotel booking and visa service information from RedStar Travel",
+        "Contact RedStar Travel about travel services"
+      ],
+      "tags": ["travel", "flights", "hotels", "visas", "travel-agency"]
+    }
+  ]
+}
