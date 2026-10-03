@@ -1,4 +1,4 @@
-const CACHE_NAME = "redstar-travel-v3";
+const CACHE_NAME = "redstar-travel-v4";
 const CORE_ASSETS = [
     "/",
     "/index.html",

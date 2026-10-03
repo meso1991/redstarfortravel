@@ -74,31 +74,47 @@ const VISA_GUIDES = {
 (function () {
     if (window.fbq) return;
 
-    !function (f, b, e, v, n, t, s) {
-        if (f.fbq) return;
-        n = f.fbq = function () {
-            n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-        };
-        if (!f._fbq) f._fbq = n;
-        n.push = n;
-        n.loaded = !0;
-        n.version = '2.0';
-        n.queue = [];
-        t = b.createElement(e);
-        t.async = !0;
-        t.src = v;
-        s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s);
-    }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    const loadMetaPixel = () => {
+        if (window.fbq) return;
 
-    if (window.fbq) {
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function () {
+                n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s);
+        }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+
         window.fbq('init', '1413400023981892');
         window.fbq('track', 'PageView');
-    }
 
-    const noscript = document.createElement('noscript');
-    noscript.innerHTML = '<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1413400023981892&ev=PageView&noscript=1" />';
-    document.head.appendChild(noscript);
+        const noscript = document.createElement('noscript');
+        noscript.innerHTML = '<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1413400023981892&ev=PageView&noscript=1" />';
+        document.head.appendChild(noscript);
+    };
+
+    const scheduleMetaPixel = () => {
+        if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(loadMetaPixel, { timeout: 5000 });
+        } else {
+            window.setTimeout(loadMetaPixel, 1000);
+        }
+    };
+
+    if (document.readyState === 'complete') {
+        scheduleMetaPixel();
+    } else {
+        window.addEventListener('load', scheduleMetaPixel, { once: true });
+    }
 })();
 
 // قاموس الترجمة المعتمد لجميع صفحات الموقع
@@ -1163,21 +1179,26 @@ function startDestinationSlideshows() {
     const imageRoot = window.location.pathname.includes("/visa/")
         ? "../assets/images/destinations/"
         : "assets/images/destinations/";
+    const optimizedImageRoot = window.location.pathname.includes("/visa/")
+        ? "../assets/images/destinations-optimized/"
+        : "assets/images/destinations-optimized/";
+    const optimizedFolders = new Set(["dubai", "saudi", "egypt", "istanbul", "Qatar", "China"]);
 
     const activateSlideshow = (image, slideshowIndex) => {
         const folder = image.dataset.slideshowFolder;
         const count = Number(image.dataset.slideshowCount);
+        const folderRoot = optimizedFolders.has(folder) ? optimizedImageRoot : imageRoot;
         const requestedStart = Number(image.dataset.slideshowStart);
         let currentImage = requestedStart >= 1 && requestedStart <= count
             ? requestedStart
             : (slideshowIndex % count) + 1;
-        image.src = `${imageRoot}${folder}/image${currentImage}.webp`;
+        image.src = `${folderRoot}${folder}/image${currentImage}.webp`;
 
         const showNextImage = () => {
             image.style.opacity = "0";
             window.setTimeout(() => {
                 currentImage = currentImage === count ? 1 : currentImage + 1;
-                image.src = `${imageRoot}${folder}/image${currentImage}.webp`;
+                image.src = `${folderRoot}${folder}/image${currentImage}.webp`;
                 image.style.opacity = "1";
             }, 600);
         };
