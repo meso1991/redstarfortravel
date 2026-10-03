@@ -110,7 +110,8 @@ const VISA_GUIDES = {
         }
     };
 
-    if (document.readyState === 'complete') {
+    const navigationTiming = performance.getEntriesByType('navigation')[0];
+    if (navigationTiming && navigationTiming.loadEventEnd > 0) {
         scheduleMetaPixel();
     } else {
         window.addEventListener('load', scheduleMetaPixel, { once: true });
