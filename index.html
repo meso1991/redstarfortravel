@@ -49,7 +49,6 @@
                     <p data-i18n="hero_text">حجوزات طيران، فنادق، وتأشيرات مصممة لتلبية احتياجات المسافرين بسرعة ومرونة عبر الشرق الأوسط، إفريقيا، والوجهات العالمية.</p>
                     <div class="hero-actions">
                         <a class="button button-primary" href="visa/visa.html" data-i18n="start_planning">ابدأ التخطيط</a>
-                        <a class="button button-secondary" href="https://wa.me/201555988432" target="_blank" data-i18n="speak_whatsapp">تحدث عبر واتساب</a>
                     </div>
                     <div class="hero-stats">
                         <div class="stat-card">
@@ -89,11 +88,11 @@
                         <div class="search-grid">
                             <div class="input-box">
                                 <label for="flight-origin" data-i18n="origin_label">مدينة المغادرة</label>
-                                <input type="text" id="flight-origin" list="airport-suggestions" placeholder="بورتسودان (PZU) أو القاهرة (CAI)">
+                                <input type="text" id="flight-origin" list="airport-suggestions" placeholder="المطار أو المدينة" data-i18n-placeholder="flight_origin_placeholder">
                             </div>
                             <div class="input-box">
                                 <label for="flight-dest" data-i18n="dest_label">وجهة الوصول</label>
-                                <input type="text" id="flight-dest" list="airport-suggestions" placeholder="جدة (JED) أو دبي (DXB)">
+                                <input type="text" id="flight-dest" list="airport-suggestions" placeholder="المطار أو المدينة" data-i18n-placeholder="flight_destination_placeholder">
                             </div>
                             <div class="input-box">
                                 <label for="flight-departure" data-i18n="dep_date_label">تاريخ المغادرة</label>
@@ -181,7 +180,7 @@
                         <div class="search-grid">
                             <div class="input-box">
                                 <label for="hotel-dest" data-i18n="hotel_dest_label">المدينة أو الفندق</label>
-                                <input type="text" id="hotel-dest" placeholder="مثال: دبي، القاهرة، الرياض، مسقط">
+                                <input type="text" id="hotel-dest" placeholder="المطار أو المدينة" data-i18n-placeholder="hotel_destination_placeholder">
                             </div>
                             <div class="input-box">
                                 <label for="hotel-checkin" data-i18n="checkin_label">تاريخ الدخول</label>
@@ -299,6 +298,6 @@
         </div>
     </footer>
 
-    <script src="js/main.js?v=20261004-performance"></script>
+    <script src="js/main.js?v=20261111-city-placeholder"></script>
 </body>
 </html>
