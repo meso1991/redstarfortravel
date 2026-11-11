@@ -17,7 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/app.css?v=20261112-api-search">
 </head>
 <body data-page="hotel_results">
     <header class="site-header">
@@ -41,14 +41,15 @@
         <section class="page-hero" style="--page-hero-image: url('assets/images/hotel-search-bg.webp');">
             <div class="page-hero-content">
                 <span class="eyebrow" id="hotelResultsEyebrow">Hotel Search</span>
-                <h1 id="hotelResultsTitle">Compare hotel options from your booking partners.</h1>
-                <p id="hotelResultsSubtitle">Use the links below to open the same search on Booking.com and Agoda.</p>
+                <h1 id="hotelResultsTitle">Available hotel rates</h1>
+                <p id="hotelResultsSubtitle">Rates and availability are returned by Nuitee Connect.</p>
             </div>
         </section>
 
         <section class="section">
             <div class="container section-stack">
                 <div class="detail-card" id="hotelSearchSummary"></div>
+                <div class="detail-card" id="hotelResultsStatus" role="status" aria-live="polite"></div>
                 <div class="cards-grid" id="hotelResultsGrid"></div>
             </div>
         </section>
@@ -66,7 +67,7 @@
         </div>
     </footer>
 
-    <script src="js/main.js?v=20261004-performance"></script>
-    <script src="js/hotel-results.js"></script>
+    <script src="js/main.js?v=20261112-api-search"></script>
+    <script src="js/hotel-results.js?v=20261112-api-search"></script>
 </body>
 </html>

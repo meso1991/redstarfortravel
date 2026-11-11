@@ -1,15 +1,12 @@
 const resultsTranslations = {
     en: {
         eyebrow: 'Live Flight Search',
-        title: 'We are checking prices and providers for your trip.',
-        subtitle: 'Results appear inside RedStar Travel. Duffel test-mode results are for integration testing only.',
+        title: 'Flight search results',
+        subtitle: 'Live offers returned by the Duffel test API. Prices and availability are for testing only.',
         loading: 'Loading results...',
         searchSummary: 'Search Summary',
-        sourceLive: 'Source: live Wego results',
         sourceDuffelTest: 'Source: Duffel test-mode results',
-        sourceMock: 'Source: demo fallback while API credentials are not configured',
-        sourceFallback: 'Source: fallback results because live search returned an error',
-        localFallbackNote: 'These options are shown locally because live flight API access is not available on the current host.',
+        searchError: 'The flight search API could not return results. Please try again later.',
         lowestPrice: 'Lowest price',
         provider: 'Provider',
         route: 'Route',
@@ -21,24 +18,6 @@ const resultsTranslations = {
         exchangeable: 'Exchangeable',
         official: 'Official airline',
         agency: 'Agency / OTA',
-        openProvider: 'Open Provider',
-        bookWithRedStar: 'Book with RedStar (WhatsApp)',
-        whatsappLanguage: 'en',
-        whatsappTitle: 'Flight Booking Request',
-        whatsappRoute: 'Route',
-        whatsappType: 'Type',
-        whatsappDeparture: 'Departure',
-        whatsappReturn: 'Return',
-        whatsappPassengers: 'Passengers',
-        whatsappCabin: 'Cabin',
-        whatsappAirline: 'Airline',
-        whatsappDuration: 'Duration',
-        whatsappStops: 'Stops',
-        whatsappPrice: 'Price',
-        whatsappRefundable: 'Refundable',
-        whatsappExchangeable: 'Exchangeable',
-        whatsappClosing: 'Please help me complete this booking.',
-        unavailable: 'Booking link not available yet',
         oneWay: 'One way',
         roundTrip: 'Round trip',
         noResults: 'No trips were returned for this search yet.',
@@ -52,15 +31,12 @@ const resultsTranslations = {
     },
     ar: {
         eyebrow: 'بحث رحلات حي',
-        title: 'نقوم الآن بفحص الأسعار ومزودي الحجز لرحلتك.',
-        subtitle: 'تظهر النتائج داخل موقع ريدستار. نتائج Duffel التجريبية مخصصة لاختبار الربط فقط.',
+        title: 'نتائج البحث عن الرحلات',
+        subtitle: 'عروض مباشرة من واجهة Duffel التجريبية. الأسعار والتوافر للاختبار فقط.',
         loading: 'جارٍ تحميل النتائج...',
         searchSummary: 'ملخص البحث',
-        sourceLive: 'المصدر: نتائج Wego الحية',
         sourceDuffelTest: 'المصدر: نتائج Duffel التجريبية',
-        sourceMock: 'المصدر: نتائج تجريبية إلى حين إضافة بيانات الربط',
-        sourceFallback: 'المصدر: نتائج بديلة لأن البحث الحي أعاد خطأ',
-        localFallbackNote: 'هذه الخيارات معروضة محليًا لأن واجهة الرحلات الحية غير متاحة على الخادم الحالي.',
+        searchError: 'تعذر الحصول على نتائج من واجهة البحث. حاول مرة أخرى لاحقًا.',
         lowestPrice: 'أقل سعر',
         provider: 'مزود الحجز',
         route: 'المسار',
@@ -72,24 +48,6 @@ const resultsTranslations = {
         exchangeable: 'قابل للتغيير',
         official: 'شركة طيران رسمية',
         agency: 'وكالة / OTA',
-        openProvider: 'فتح مزود الحجز',
-        bookWithRedStar: 'احجز مع ريدستار (واتساب)',
-        whatsappLanguage: 'ar',
-        whatsappTitle: 'طلب حجز طيران',
-        whatsappRoute: 'خط السير',
-        whatsappType: 'نوع الرحلة',
-        whatsappDeparture: 'تاريخ المغادرة',
-        whatsappReturn: 'تاريخ العودة',
-        whatsappPassengers: 'المسافرون',
-        whatsappCabin: 'الدرجة',
-        whatsappAirline: 'شركة الطيران',
-        whatsappDuration: 'المدة',
-        whatsappStops: 'التوقفات',
-        whatsappPrice: 'السعر',
-        whatsappRefundable: 'قابل للاسترداد',
-        whatsappExchangeable: 'قابل للتغيير',
-        whatsappClosing: 'أرجو مساعدتي في إكمال هذا الحجز.',
-        unavailable: 'رابط الحجز غير متوفر بعد',
         oneWay: 'ذهاب فقط',
         roundTrip: 'ذهاب وعودة',
         noResults: 'لم يتم العثور على رحلات لهذا البحث حتى الآن.',
@@ -119,102 +77,6 @@ const airportCityMap = {
     KRT: 'Khartoum'
 };
 
-function buildClientFallbackResults(query, t) {
-    const originCode = String(query.origin || '').trim().toUpperCase();
-    const destinationCode = String(query.destination || '').trim().toUpperCase();
-    const originCity = airportCityMap[originCode] || formatPlaceLabel(query.origin) || 'Origin';
-    const destinationCity = airportCityMap[destinationCode] || formatPlaceLabel(query.destination) || 'Destination';
-    const isRoundTrip = Boolean(query.returnDate);
-
-    return {
-        source: 'mock',
-        note: t.localFallbackNote,
-        trips: [
-            {
-                providerName: 'Qatar Airways',
-                providerType: 'airline',
-                price: 299,
-                currency: 'USD',
-                handoffUrl: 'https://www.qatarairways.com/',
-                route: {
-                    originCity,
-                    originCode,
-                    destinationCity,
-                    destinationCode
-                },
-                outbound: {
-                    departureTime: '08:25',
-                    arrivalTime: '12:10',
-                    duration: '3h 45m',
-                    stops: 0
-                },
-                inbound: isRoundTrip ? {
-                    departureTime: '18:40',
-                    arrivalTime: '22:25',
-                    duration: '3h 45m',
-                    stops: 0
-                } : null,
-                refundable: true,
-                exchangeable: true
-            },
-            {
-                providerName: 'Turkish Airlines',
-                providerType: 'airline',
-                price: 345,
-                currency: 'USD',
-                handoffUrl: 'https://www.turkishairlines.com/',
-                route: {
-                    originCity,
-                    originCode,
-                    destinationCity,
-                    destinationCode
-                },
-                outbound: {
-                    departureTime: '14:05',
-                    arrivalTime: '18:50',
-                    duration: '4h 45m',
-                    stops: 1
-                },
-                inbound: isRoundTrip ? {
-                    departureTime: '09:35',
-                    arrivalTime: '14:20',
-                    duration: '4h 45m',
-                    stops: 1
-                } : null,
-                refundable: false,
-                exchangeable: true
-            },
-            {
-                providerName: 'Booking Partner',
-                providerType: 'agency',
-                price: 389,
-                currency: 'USD',
-                handoffUrl: 'https://www.skyscanner.net/',
-                route: {
-                    originCity,
-                    originCode,
-                    destinationCity,
-                    destinationCode
-                },
-                outbound: {
-                    departureTime: '21:10',
-                    arrivalTime: '02:25',
-                    duration: '5h 15m',
-                    stops: 1
-                },
-                inbound: isRoundTrip ? {
-                    departureTime: '11:15',
-                    arrivalTime: '16:30',
-                    duration: '5h 15m',
-                    stops: 1
-                } : null,
-                refundable: false,
-                exchangeable: false
-            }
-        ]
-    };
-}
-
 function getResultsLang() {
     return localStorage.getItem('redstar_lang') || 'en';
 }
@@ -238,6 +100,16 @@ function formatPassengerSummary(query, t) {
     return `${query.adults} ${t.adults} • ${query.children} ${t.children} • ${query.infants} ${t.infants}`;
 }
 
+function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, (character) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    })[character]);
+}
+
 function formatPlaceLabel(value) {
     const raw = String(value || '').trim();
     const upper = raw.toUpperCase();
@@ -253,42 +125,13 @@ function formatSearchSummary(query, t) {
     const type = query.returnDate ? t.roundTrip : t.oneWay;
     return `
         <span class="kicker">${t.searchSummary}</span>
-        <h2>${formatPlaceLabel(query.origin)} → ${formatPlaceLabel(query.destination)}</h2>
+        <h2>${escapeHtml(formatPlaceLabel(query.origin))} → ${escapeHtml(formatPlaceLabel(query.destination))}</h2>
         <div class="meta-row">
-            <span>${type}</span>
-            <span>${query.departureDate}${query.returnDate ? ` - ${query.returnDate}` : ''}</span>
-            <span>${formatPassengerSummary(query, t)}</span>
+            <span>${escapeHtml(type)}</span>
+            <span>${escapeHtml(query.departureDate)}${query.returnDate ? ` - ${escapeHtml(query.returnDate)}` : ''}</span>
+            <span>${escapeHtml(formatPassengerSummary(query, t))}</span>
         </div>
     `;
-}
-
-function buildFlightWhatsAppMessage(trip, query, t) {
-    const tripType = query.returnDate ? t.roundTrip : t.oneWay;
-    const cabinLabel = query.cabin || 'economy';
-    const currency = query.currency || 'USD';
-    const arabic = t.whatsappLanguage === 'ar';
-    const passengers = arabic
-        ? `${query.adults} بالغ${query.adults > 1 ? 'ين' : ''}${query.children > 0 ? `، ${query.children} طفل` : ''}${query.infants > 0 ? `، ${query.infants} رضيع` : ''}`
-        : `${query.adults} adult${query.adults > 1 ? 's' : ''}${query.children > 0 ? `, ${query.children} child${query.children > 1 ? 'ren' : ''}` : ''}${query.infants > 0 ? `, ${query.infants} infant${query.infants > 1 ? 's' : ''}` : ''}`;
-
-    let message = `*${t.whatsappTitle}*\n\n`;
-    message += `• *${t.whatsappRoute}:* ${trip.route.originCity} (${trip.route.originCode}) → ${trip.route.destinationCity} (${trip.route.destinationCode})\n`;
-    message += `• *${t.whatsappType}:* ${tripType}\n`;
-    message += `• *${t.whatsappDeparture}:* ${query.departureDate}\n`;
-    if (query.returnDate) {
-        message += `• *${t.whatsappReturn}:* ${query.returnDate}\n`;
-    }
-    message += `• *${t.whatsappPassengers}:* ${passengers}\n`;
-    message += `• *${t.whatsappCabin}:* ${cabinLabel}\n`;
-    message += `• *${t.whatsappAirline}:* ${trip.providerName}\n`;
-    message += `• *${t.whatsappDuration}:* ${trip.outbound.duration}\n`;
-    message += `• *${t.whatsappStops}:* ${t.stopLabel(trip.outbound.stops)}\n`;
-    message += `• *${t.whatsappPrice}:* ${trip.price} ${currency}\n`;
-    message += `• *${t.whatsappRefundable}:* ${trip.refundable ? t.yes : t.no}\n`;
-    message += `• *${t.whatsappExchangeable}:* ${trip.exchangeable ? t.yes : t.no}\n\n`;
-    message += t.whatsappClosing;
-    
-    return message;
 }
 
 function renderResults(payload, query) {
@@ -301,14 +144,8 @@ function renderResults(payload, query) {
     summary.innerHTML = formatSearchSummary(query, t);
     grid.innerHTML = '';
 
-    const sourceText = payload.source === 'duffel_test'
-        ? t.sourceDuffelTest
-        : payload.source === 'wego_live' || payload.source === 'aviationstack_live'
-            ? t.sourceLive
-            : payload.source === 'mock'
-                ? t.sourceMock
-                : t.sourceFallback;
-    status.innerHTML = `<strong>${sourceText}</strong>${payload.note ? `<p style="margin-top: 10px; color: var(--muted);">${payload.note}</p>` : ''}`;
+    const sourceText = payload.source === 'duffel_test' ? t.sourceDuffelTest : t.searchError;
+    status.innerHTML = `<strong>${escapeHtml(sourceText)}</strong>${payload.note ? `<p style="margin-top: 10px; color: var(--muted);">${escapeHtml(payload.note)}</p>` : ''}`;
 
     const trips = payload.trips || [];
     if (trips.length === 0) {
@@ -320,35 +157,23 @@ function renderResults(payload, query) {
         const card = document.createElement('article');
         card.className = 'detail-card';
 
-        const providerType = trip.providerType === 'airline' ? t.official : t.agency;
-        const whatsappMessage = buildFlightWhatsAppMessage(trip, query, t);
-
-        const buttonsHtml = `
-            <div class="hero-actions" style="display: flex; gap: 10px; flex-wrap: wrap;">
-                ${trip.handoffUrl ? `<a class="button button-primary" href="${trip.handoffUrl}" target="_blank" rel="noopener noreferrer">${t.openProvider}</a>` : ''}
-                <button class="button button-secondary" type="button" onclick="sendFlightToWhatsApp('${whatsappMessage.replace(/'/g, "\\'")}'); return false;">${t.bookWithRedStar}</button>
-            </div>
-        `;
-
         card.innerHTML = `
             <span class="kicker">${t.lowestPrice}</span>
-            <h3>${trip.price} ${trip.currency}</h3>
+            <h3>${escapeHtml(trip.price)} ${escapeHtml(trip.currency)}</h3>
             <div class="meta-row">
-                <span>${t.provider}: ${trip.providerName}</span>
-                <span>${providerType}</span>
+                <span>${t.provider}: ${escapeHtml(trip.providerName)}</span>
             </div>
-            <p><strong>${t.route}:</strong> ${trip.route.originCity} (${trip.route.originCode}) → ${trip.route.destinationCity} (${trip.route.destinationCode})</p>
+            <p><strong>${t.route}:</strong> ${escapeHtml(trip.route.originCity)} (${escapeHtml(trip.route.originCode)}) → ${escapeHtml(trip.route.destinationCity)} (${escapeHtml(trip.route.destinationCode)})</p>
             <div class="meta-row">
-                <span>${t.outbound}: ${trip.outbound.departureTime} - ${trip.outbound.arrivalTime}</span>
-                <span>${t.duration}: ${trip.outbound.duration}</span>
-                <span>${t.stops}: ${t.stopLabel(trip.outbound.stops)}</span>
+                <span>${t.outbound}: ${escapeHtml(trip.outbound.departureTime)} - ${escapeHtml(trip.outbound.arrivalTime)}</span>
+                <span>${t.duration}: ${escapeHtml(trip.outbound.duration)}</span>
+                <span>${t.stops}: ${escapeHtml(t.stopLabel(trip.outbound.stops))}</span>
             </div>
-            ${trip.inbound ? `<div class="meta-row"><span>${t.inbound}: ${trip.inbound.departureTime} - ${trip.inbound.arrivalTime}</span><span>${t.duration}: ${trip.inbound.duration}</span><span>${t.stops}: ${t.stopLabel(trip.inbound.stops)}</span></div>` : ''}
+            ${trip.inbound ? `<div class="meta-row"><span>${t.inbound}: ${escapeHtml(trip.inbound.departureTime)} - ${escapeHtml(trip.inbound.arrivalTime)}</span><span>${t.duration}: ${escapeHtml(trip.inbound.duration)}</span><span>${t.stops}: ${escapeHtml(t.stopLabel(trip.inbound.stops))}</span></div>` : ''}
             <div class="meta-row">
                 <span>${t.refundable}: ${trip.refundable ? t.yes : t.no}</span>
                 <span>${t.exchangeable}: ${trip.exchangeable ? t.yes : t.no}</span>
             </div>
-            ${buttonsHtml}
         `;
 
         grid.appendChild(card);
@@ -383,10 +208,7 @@ async function initResultsPage() {
         }
         renderResults(payload, query);
     } catch (error) {
-        const fallback = buildClientFallbackResults(query, t);
-        fallback.source = 'fallback';
-        fallback.note = `${t.localFallbackNote} ${error.message}`;
-        renderResults(fallback, query);
+        status.textContent = `${t.searchError} ${error.message}`;
     }
 }
 

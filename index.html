@@ -129,7 +129,7 @@
                                     <div class="p-input"><label for="infants" data-i18n="infants">رضع</label><input type="number" id="infants" value="0" min="0"></div>
                                 </div>
                             </div>
-                            <button class="button button-primary search-submit" type="button" onclick="searchFlights()" data-i18n="search_flights_btn">طلب حجز الطيران عبر واتساب</button>
+                            <button class="button button-primary search-submit" type="button" onclick="searchFlights()" data-i18n="search_flights_btn">ابحث عن الرحلات</button>
                         </div>
                         <datalist id="airport-suggestions">
                             <option value="Port Sudan (PZU)"></option>
@@ -180,7 +180,7 @@
                         <div class="search-grid">
                             <div class="input-box">
                                 <label for="hotel-dest" data-i18n="hotel_dest_label">المدينة أو الفندق</label>
-                                <input type="text" id="hotel-dest" placeholder="المطار أو المدينة" data-i18n-placeholder="hotel_destination_placeholder">
+                                <input type="text" id="hotel-dest" list="airport-suggestions" placeholder="المطار أو المدينة" data-i18n-placeholder="hotel_destination_placeholder">
                             </div>
                             <div class="input-box">
                                 <label for="hotel-checkin" data-i18n="checkin_label">تاريخ الدخول</label>
@@ -198,7 +198,25 @@
                                     <div class="p-input"><label for="hotel-kids" data-i18n="kids_label">الأطفال</label><input type="number" id="hotel-kids" value="0" min="0"></div>
                                 </div>
                             </div>
-                            <button class="button button-primary search-submit" type="button" onclick="searchHotels()" data-i18n="search_hotels_btn">طلب حجز الفندق عبر واتساب</button>
+                            <div class="input-box">
+                                <label for="hotel-child-ages" data-i18n="hotel_child_ages_label">أعمار الأطفال</label>
+                                <input type="text" id="hotel-child-ages" inputmode="numeric" placeholder="مثال: 5, 9" data-i18n-placeholder="hotel_child_ages_placeholder">
+                            </div>
+                            <div class="input-box">
+                                <label for="hotel-nationality" data-i18n="hotel_nationality_label">جنسية المسافر (رمز الدولة)</label>
+                                <input type="text" id="hotel-nationality" value="SD" maxlength="2" autocapitalize="characters">
+                            </div>
+                            <div class="input-box">
+                                <label for="hotel-currency" data-i18n="hotel_currency_label">العملة</label>
+                                <select id="hotel-currency">
+                                    <option value="USD" selected>USD ($)</option>
+                                    <option value="SDG">SDG (جنيه سوداني)</option>
+                                    <option value="SAR">SAR (ريال سعودي)</option>
+                                    <option value="AED">AED (درهم إماراتي)</option>
+                                    <option value="EGP">EGP (جنيه مصري)</option>
+                                </select>
+                            </div>
+                            <button class="button button-primary search-submit" type="button" onclick="searchHotels()" data-i18n="search_hotels_btn">ابحث عن الفنادق</button>
                         </div>
                     </div>
                 </aside>
@@ -298,6 +316,6 @@
         </div>
     </footer>
 
-    <script src="js/main.js?v=20261111-city-placeholder"></script>
+    <script src="js/main.js?v=20261112-api-search"></script>
 </body>
 </html>

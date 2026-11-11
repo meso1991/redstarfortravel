@@ -45,12 +45,14 @@ https://redstar-travel.com/visa/visa.html
 
 The health response should include `"cloudflare": true` and `"storageConfigured": true` after the R2 and D1 bindings are active.
 
-## Duffel test flight search
+## Duffel flight and Nuitee hotel search
 
-The official site currently uses static GitHub Pages hosting in front of Cloudflare, so Pages Functions are not active. A standalone Worker is used for Duffel search without moving the site:
+The official site currently uses static GitHub Pages hosting in front of Cloudflare, so Pages Functions are not active. A standalone Worker handles Duffel flight searches and Nuitee Connect hotel searches:
 
 1. Deploy `workers/duffel-search.js` as `redstar-duffel-search` on Cloudflare Workers.
-2. In Worker **Settings > Variables and Secrets**, add `DUFFEL_API_TOKEN` as a **secret** variable. Never put the token in source code or a regular variable.
-3. Keep the Worker `workers.dev` URL enabled. The results page calls it directly, and the Worker only allows the official site's origins.
+2. In Worker **Settings > Variables and Secrets**, add `DUFFEL_API_TOKEN` and `NUITEE_API_KEY` as **secret** variables. Never put either key in source code or a regular variable.
+3. Keep the Worker `workers.dev` URL enabled. The results pages call it directly, and the Worker only allows the official site's origins.
 
-The supplied `duffel_test_` credential is for test-mode searches only. The results page labels these results as test data; this does not enable real bookings.
+The supplied `duffel_test_` credential and Nuitee sandbox key are for test-mode searches only. The results pages label these results as test data; this does not enable real bookings.
+
+The public endpoints are `GET /api/flights/search` and `GET /api/hotels/search`. The Worker keeps both provider keys server-side; hotel search is sent to Nuitee Connect's `POST /v3.0/hotels/rates` endpoint.

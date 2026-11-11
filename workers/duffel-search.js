@@ -1,10 +1,12 @@
 const DUFFEL_OFFER_REQUESTS_URL = "https://api.duffel.com/air/offer_requests";
+const NUITEE_HOTEL_RATES_URL = "https://api.liteapi.travel/v3.0/hotels/rates";
 const WORKER_ORIGINS = new Set([
     "https://redstar-travel.com",
     "https://www.redstar-travel.com"
 ]);
 const MAX_PASSENGERS = 9;
 const MAX_OFFERS = 10;
+const MAX_HOTEL_RESULTS = 20;
 
 const CITY_CODES = {
     cairo: "CAI",
@@ -141,6 +143,153 @@ function normalizeOffer(offer) {
     };
 }
 
+function parseChildAges(value) {
+    if (!value) return [];
+    const ages = value.split(",").map((age) => age.trim());
+    if (ages.some((age) => !/^(?:[0-9]|1[0-7])$/.test(age))) return null;
+    return ages.map(Number);
+}
+
+function getHotelPrice(offer, roomType) {
+    const offerPrice = Array.isArray(offer?.offerRetailRate)
+        ? offer.offerRetailRate[0]
+        : offer?.offerRetailRate;
+    if (Number.isFinite(Number(offerPrice?.amount)) && Number(offerPrice.amount) > 0) {
+        return { amount: Number(offerPrice.amount), currency: offerPrice.currency || "" };
+    }
+
+    const rate = roomType?.rates?.[0];
+    const rateTotal = Array.isArray(rate?.retailRate?.total) ? rate.retailRate.total[0] : null;
+    if (Number.isFinite(Number(rateTotal?.amount)) && Number(rateTotal.amount) > 0) {
+        return { amount: Number(rateTotal.amount), currency: rateTotal.currency || "" };
+    }
+    return null;
+}
+
+function normalizeHotel(offer, hotelsById) {
+    const roomTypes = Array.isArray(offer?.roomTypes) ? offer.roomTypes : [];
+    const hotel = hotelsById.get(offer?.hotelId) || {};
+    const choices = roomTypes
+        .map((roomType) => ({ roomType, price: getHotelPrice(offer, roomType) }))
+        .filter((choice) => choice.price)
+        .sort((a, b) => a.price.amount - b.price.amount);
+    if (!choices.length) return null;
+
+    const { roomType, price } = choices[0];
+    const rate = Array.isArray(roomType.rates) ? roomType.rates[0] : null;
+    const refundableTag = rate?.cancellationPolicies?.refundableTag;
+    return {
+        id: offer.hotelId || hotel.id || "",
+        name: hotel.name || offer.hotelName || "Hotel",
+        city: hotel.city_name || "",
+        address: hotel.address || "",
+        photo: hotel.main_photo || hotel.thumbnail || "",
+        rating: Number.isFinite(Number(hotel.rating)) && Number(hotel.rating) > 0 ? Number(hotel.rating) : null,
+        stars: Number.isFinite(Number(hotel.stars)) && Number(hotel.stars) > 0 ? Number(hotel.stars) : null,
+        price: price.amount,
+        currency: price.currency || "",
+        room: rate?.name || roomType.name || "",
+        board: rate?.boardName || "",
+        refundable: refundableTag ? refundableTag === "RFN" : null
+    };
+}
+
+async function searchNuiteeHotels(request, env, corsOrigin) {
+    const params = new URL(request.url).searchParams;
+    const destination = (params.get("destination") || "").trim();
+    const checkin = params.get("checkin") || "";
+    const checkout = params.get("checkout") || "";
+    const adults = parseCount(params.get("adults"), 2, 1);
+    const rooms = parseCount(params.get("rooms"), 1, 1);
+    const childAges = parseChildAges(params.get("childAges") || "");
+    const nationality = (params.get("nationality") || "SD").toUpperCase();
+    const currency = (params.get("currency") || "USD").toUpperCase();
+
+    if (!destination || destination.length > 120 || !isValidDate(checkin) || !isValidDate(checkout) || checkout <= checkin) {
+        return jsonResponse({ error: "Enter a destination and valid check-in/check-out dates." }, 400, corsOrigin);
+    }
+    if (adults === null || rooms === null || adults < rooms || childAges === null
+        || adults + childAges.length > MAX_PASSENGERS) {
+        return jsonResponse({ error: "Guest, room, or child age details are invalid." }, 400, corsOrigin);
+    }
+    if (!/^[A-Z]{2}$/.test(nationality) || !/^[A-Z]{3}$/.test(currency)) {
+        return jsonResponse({ error: "Use a two-letter nationality code and a three-letter currency code." }, 400, corsOrigin);
+    }
+    if (!env.NUITEE_API_KEY) {
+        return jsonResponse({ error: "Nuitee Connect is not configured on this deployment." }, 503, corsOrigin);
+    }
+
+    const childAgesByRoom = Array.from({ length: rooms }, () => []);
+    childAges.forEach((age, index) => childAgesByRoom[index % rooms].push(age));
+    const baseAdultsPerRoom = Math.floor(adults / rooms);
+    const extraAdults = adults % rooms;
+    const occupancies = childAgesByRoom.map((children, index) => ({
+        rooms: 1,
+        adults: baseAdultsPerRoom + (index < extraAdults ? 1 : 0),
+        children
+    }));
+
+    const locationCode = destination.match(/(?:\(([A-Za-z]{3})\)\s*|^([A-Za-z]{3})$)/);
+    const searchBody = {
+        checkin,
+        checkout,
+        currency,
+        guestNationality: nationality,
+        occupancies,
+        timeout: 10,
+        limit: MAX_HOTEL_RESULTS,
+        maxRatesPerHotel: 1,
+        sort: [{ field: "price", direction: "ascending" }],
+        includeHotelData: true
+    };
+    if (locationCode) {
+        searchBody.iataCode = (locationCode[1] || locationCode[2]).toUpperCase();
+    } else {
+        searchBody.aiSearch = `Hotels in ${destination}`;
+    }
+
+    let response;
+    try {
+        response = await fetch(NUITEE_HOTEL_RATES_URL, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "X-API-Key": env.NUITEE_API_KEY
+            },
+            body: JSON.stringify(searchBody)
+        });
+    } catch {
+        return jsonResponse({ error: "Unable to reach Nuitee Connect. Please try again shortly." }, 502, corsOrigin);
+    }
+
+    let body;
+    try {
+        body = await response.json();
+    } catch {
+        return jsonResponse({ error: "Nuitee Connect returned an invalid response." }, 502, corsOrigin);
+    }
+    if (!response.ok) {
+        const message = body?.error?.message || body?.message || body?.errors?.[0]?.message;
+        return jsonResponse({ error: message || `Hotel search failed (${response.status}).` }, 502, corsOrigin);
+    }
+
+    const hotelsById = new Map(
+        (Array.isArray(body?.hotels) ? body.hotels : []).map((hotel) => [hotel.id, hotel])
+    );
+    const hotels = (Array.isArray(body?.data) ? body.data : [])
+        .map((offer) => normalizeHotel(offer, hotelsById))
+        .filter(Boolean)
+        .sort((a, b) => a.price - b.price)
+        .slice(0, MAX_HOTEL_RESULTS);
+
+    return jsonResponse({
+        source: "nuitee_connect",
+        sandbox: body?.sandbox === true,
+        hotels
+    }, 200, corsOrigin);
+}
+
 function buildPassengers(adults, children, infants) {
     return [
         ...Array.from({ length: adults }, () => ({ type: "adult" })),
@@ -245,12 +394,15 @@ export default {
         if (request.method === "OPTIONS") {
             return new Response(null, { status: 204, headers: corsHeaders(origin) });
         }
-        if (url.pathname !== "/api/flights/search") {
-            return jsonResponse({ error: "Not Found." }, 404, origin);
-        }
         if (request.method !== "GET") {
             return jsonResponse({ error: "Method not allowed." }, 405, origin);
         }
-        return searchDuffel(request, env, origin);
+        if (url.pathname === "/api/flights/search") {
+            return searchDuffel(request, env, origin);
+        }
+        if (url.pathname === "/api/hotels/search") {
+            return searchNuiteeHotels(request, env, origin);
+        }
+        return jsonResponse({ error: "Not Found." }, 404, origin);
     }
 };

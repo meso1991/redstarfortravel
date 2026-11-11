@@ -159,7 +159,7 @@ const translations = {
         adults: "بالغين",
         kids: "أطفال",
         infants: "رضع",
-        search_flights_btn: "طلب حجز الطيران عبر واتساب",
+        search_flights_btn: "ابحث عن الرحلات",
         hotel_dest_label: "المدينة أو الفندق",
         checkin_label: "تاريخ الدخول",
         checkout_label: "تاريخ الخروج",
@@ -167,7 +167,11 @@ const translations = {
         rooms: "الغرف",
         guests: "البالغين",
         kids_label: "الأطفال",
-        search_hotels_btn: "طلب حجز الفندق عبر واتساب",
+        hotel_child_ages_label: "أعمار الأطفال",
+        hotel_child_ages_placeholder: "مثال: 5, 9",
+        hotel_nationality_label: "جنسية المسافر (رمز الدولة)",
+        hotel_currency_label: "العملة",
+        search_hotels_btn: "ابحث عن الفنادق",
         featured_kicker: "أبرز الوجهات",
         featured_title: "الوجهات الأكثر طلباً لدى مسافرينا",
         featured_text: "خطوط طيران مباشرة وإقامات مريحة لأهم الوجهات الإقليمية والدولية.",
@@ -538,7 +542,7 @@ const translations = {
         adults: "Adults",
         kids: "Children",
         infants: "Infants",
-        search_flights_btn: "Request Flight on WhatsApp",
+        search_flights_btn: "Search flights",
         hotel_dest_label: "Destination",
         checkin_label: "Check-in",
         checkout_label: "Check-out",
@@ -546,7 +550,11 @@ const translations = {
         rooms: "Rooms",
         guests: "Guests",
         kids_label: "Kids",
-        search_hotels_btn: "Request Hotel on WhatsApp",
+        hotel_child_ages_label: "Children's ages",
+        hotel_child_ages_placeholder: "Example: 5, 9",
+        hotel_nationality_label: "Guest nationality (country code)",
+        hotel_currency_label: "Currency",
+        search_hotels_btn: "Search hotels",
         featured_kicker: "Featured Destinations",
         featured_title: "Popular routes our travelers keep returning to.",
         featured_text: "Direct airline connections and curated stays for top regional and global destinations.",
@@ -933,27 +941,12 @@ function openWhatsAppMessage(message, phoneNumber = REDSTAR_WHATSAPP) {
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
-function sendFlightToWhatsApp(message) {
-    openWhatsAppMessage(message);
-}
-
 // 1. معالجة طلب الطيران
-function formatTravelerCount(count, singular, plural, language) {
-    const numericCount = Number(count);
-    if (language === "en") {
-        return `${numericCount} ${numericCount === 1 ? singular : plural}`;
-    }
-    if (numericCount === 1) {
-        return `واحد ${singular}`;
-    }
-    return `${numericCount} ${plural}`;
-}
-
 function searchFlights() {
     const language = isArabicPage() ? "ar" : "en";
-    const origin = document.getElementById("flight-origin")?.value.trim() || (language === "ar" ? "غير محدد" : "Not specified");
-    const dest = document.getElementById("flight-dest")?.value.trim() || (language === "ar" ? "غير محدد" : "Not specified");
-    const departure = document.getElementById("flight-departure")?.value || (language === "ar" ? "غير محدد" : "Not specified");
+    const origin = document.getElementById("flight-origin")?.value.trim() || "";
+    const dest = document.getElementById("flight-dest")?.value.trim() || "";
+    const departure = document.getElementById("flight-departure")?.value || "";
     const returnDate = document.getElementById("flight-return")?.value;
     const tripType = document.querySelector('input[name="trip-type"]:checked')?.value || "round-trip";
     const cabin = document.getElementById("flight-cabin")?.value || "Economy";
@@ -963,36 +956,82 @@ function searchFlights() {
     const infants = document.getElementById("infants")?.value || 0;
 
     const english = language === "en";
-    let msg = english
-        ? `*New Flight Booking Request (RedStar Travel)* ✈️\n\n• *Route:* From ${origin} to ${dest}\n• *Trip type:* ${tripType === 'round-trip' ? 'Round trip' : 'One way'}\n• *Travel date:* ${departure}\n`
-        : `*طلب حجز طيران جديد (RedStar Travel)* ✈️\n\n• *خط السير:* من ${origin} إلى ${dest}\n• *نوع الرحلة:* ${tripType === 'round-trip' ? 'ذهاب وعودة' : 'ذهاب فقط'}\n• *تاريخ السفر:* ${departure}\n`;
-
-    if (tripType === 'round-trip' && returnDate) {
-        msg += english ? `• *Return date:* ${returnDate}\n` : `• *تاريخ العودة:* ${returnDate}\n`;
+    if (!origin || !dest || !departure) {
+        window.alert(english ? "Enter an origin, destination, and departure date." : "أدخل مدينة المغادرة والوجهة وتاريخ المغادرة.");
+        return;
+    }
+    if (tripType === "round-trip" && (!returnDate || returnDate < departure)) {
+        window.alert(english ? "Choose a return date on or after departure." : "اختر تاريخ عودة يوافق تاريخ المغادرة أو يأتي بعده.");
+        return;
     }
 
-    msg += english
-        ? `• *Cabin:* ${cabin}\n• *Travelers:* ${formatTravelerCount(adults, 'adult', 'adults', language)}, ${formatTravelerCount(kids, 'child', 'children', language)}, ${formatTravelerCount(infants, 'infant', 'infants', language)}\n• *Currency:* ${currency}\n\n_I would like to receive the available prices and seats for this trip._`
-        : `• *الدرجة:* ${cabin}\n• *المسافرون:* ${formatTravelerCount(adults, 'بالغ', 'بالغين', language)}، ${formatTravelerCount(kids, 'طفل', 'أطفال', language)}، ${formatTravelerCount(infants, 'رضيع', 'رضع', language)}\n• *العملة:* ${currency}\n\n_أرجو تزويدي بالأسعار والمقاعد المتاحة لهذه الرحلة._`;
-
-    openWhatsAppMessage(msg);
+    const params = new URLSearchParams({
+        origin,
+        destination: dest,
+        departureDate: departure,
+        adults: String(adults),
+        children: String(kids),
+        infants: String(infants),
+        cabin,
+        currency
+    });
+    if (tripType === "round-trip" && returnDate) params.set("returnDate", returnDate);
+    window.location.href = `results.html?${params.toString()}`;
 }
 
 // 2. معالجة طلب الفنادق
 function searchHotels() {
     const english = !isArabicPage();
-    const dest = document.getElementById("hotel-dest")?.value.trim() || "غير محدد";
-    const checkin = document.getElementById("hotel-checkin")?.value || "غير محدد";
-    const checkout = document.getElementById("hotel-checkout")?.value || "غير محدد";
-    const rooms = document.getElementById("rooms")?.value || 1;
-    const guests = document.getElementById("guests")?.value || 2;
-    const kids = document.getElementById("hotel-kids")?.value || 0;
+    const destination = document.getElementById("hotel-dest")?.value.trim() || "";
+    const checkin = document.getElementById("hotel-checkin")?.value || "";
+    const checkout = document.getElementById("hotel-checkout")?.value || "";
+    const rooms = Number(document.getElementById("rooms")?.value || 1);
+    const adults = Number(document.getElementById("guests")?.value || 2);
+    const children = Number(document.getElementById("hotel-kids")?.value || 0);
+    const childAges = document.getElementById("hotel-child-ages")?.value.trim() || "";
+    const nationality = document.getElementById("hotel-nationality")?.value.trim().toUpperCase() || "SD";
+    const currency = document.getElementById("hotel-currency")?.value || "USD";
 
-    const msg = english
-        ? `*New Hotel Booking Request (RedStar Travel)* 🏨\n\n• *Destination / city:* ${dest}\n• *Check-in:* ${checkin}\n• *Check-out:* ${checkout}\n• *Rooms:* ${rooms}\n• *Guests:* ${guests} adults, ${kids} children\n\n_I would like to receive the best available hotel options and prices._`
-        : `*طلب حجز فندق جديد (RedStar Travel)* 🏨\n\n• *الوجهة / المدينة:* ${dest}\n• *تاريخ الدخول:* ${checkin}\n• *تاريخ الخروج:* ${checkout}\n• *عدد الغرف:* ${rooms}\n• *النزلاء:* ${guests} بالغين، ${kids} أطفال\n\n_أرجو تزويدي بأفضل خيارات الفنادق المتاحة وأسعارها._`;
+    if (!destination || !checkin || !checkout || checkout <= checkin) {
+        window.alert(english
+            ? "Enter a destination and valid check-in and check-out dates."
+            : "أدخل الوجهة وتاريخي دخول وخروج صحيحين.");
+        return;
+    }
+    if (!Number.isInteger(rooms) || !Number.isInteger(adults) || !Number.isInteger(children)
+        || rooms < 1 || adults < rooms || children < 0 || adults + children > 9) {
+        window.alert(english
+            ? "The number of rooms and guests is invalid. Each room needs at least one adult."
+            : "عدد الغرف والنزلاء غير صحيح. يجب وجود بالغ واحد على الأقل في كل غرفة.");
+        return;
+    }
 
-    openWhatsAppMessage(msg);
+    const ages = children === 0 ? [] : childAges.split(/[,،]/).map((age) => age.trim());
+    if (ages.length !== children || ages.some((age) => !/^(?:[0-9]|1[0-7])$/.test(age))) {
+        window.alert(english
+            ? "Enter the age of each child (0–17), separated by commas."
+            : "أدخل عمر كل طفل (من 0 إلى 17) وافصل بين الأعمار بفواصل.");
+        return;
+    }
+    if (!/^[A-Z]{2}$/.test(nationality)) {
+        window.alert(english
+            ? "Enter a two-letter guest nationality code, such as SD."
+            : "أدخل رمز جنسية من حرفين، مثل SD.");
+        return;
+    }
+
+    const params = new URLSearchParams({
+        destination,
+        checkin,
+        checkout,
+        rooms: String(rooms),
+        adults: String(adults),
+        children: String(children),
+        childAges: ages.join(","),
+        nationality,
+        currency
+    });
+    window.location.href = `hotel-results.html?${params.toString()}`;
 }
 
 // 3. إرسال طلب تأشيرة مخصصة
@@ -1235,12 +1274,6 @@ function startDestinationSlideshows() {
     images.forEach((image) => observer.observe(image));
 }
 
-// عند تحميل الصفحة
-async function markHiddenVisit() {
-    // This website uses WhatsApp-based requests only.
-    // No backend analytics API is required or available.
-}
-
 function getStoredReviews() {
     try {
         const raw = localStorage.getItem(REVIEW_STORAGE_KEY);
@@ -1355,7 +1388,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     loadReviews();
-    markHiddenVisit();
     startDestinationSlideshows();
     removeDeletedPageLinks();
     setupVisaWizard();
