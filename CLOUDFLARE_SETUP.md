@@ -44,3 +44,13 @@ https://redstar-travel.com/visa/visa.html
 ```
 
 The health response should include `"cloudflare": true` and `"storageConfigured": true` after the R2 and D1 bindings are active.
+
+## Duffel test flight search
+
+The official site currently uses static GitHub Pages hosting in front of Cloudflare, so Pages Functions are not active. A standalone Worker is used for Duffel search without moving the site:
+
+1. Deploy `workers/duffel-search.js` as `redstar-duffel-search` on Cloudflare Workers.
+2. In Worker **Settings > Variables and Secrets**, add `DUFFEL_API_TOKEN` as a **secret** variable. Never put the token in source code or a regular variable.
+3. Keep the Worker `workers.dev` URL enabled. The results page calls it directly, and the Worker only allows the official site's origins.
+
+The supplied `duffel_test_` credential is for test-mode searches only. The results page labels these results as test data; this does not enable real bookings.

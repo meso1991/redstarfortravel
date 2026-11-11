@@ -2,10 +2,11 @@ const resultsTranslations = {
     en: {
         eyebrow: 'Live Flight Search',
         title: 'We are checking prices and providers for your trip.',
-        subtitle: 'Results are shown inside RedStar Travel and can switch to live Wego data once your API token is configured.',
+        subtitle: 'Results appear inside RedStar Travel. Duffel test-mode results are for integration testing only.',
         loading: 'Loading results...',
         searchSummary: 'Search Summary',
         sourceLive: 'Source: live Wego results',
+        sourceDuffelTest: 'Source: Duffel test-mode results',
         sourceMock: 'Source: demo fallback while API credentials are not configured',
         sourceFallback: 'Source: fallback results because live search returned an error',
         localFallbackNote: 'These options are shown locally because live flight API access is not available on the current host.',
@@ -52,10 +53,11 @@ const resultsTranslations = {
     ar: {
         eyebrow: 'بحث رحلات حي',
         title: 'نقوم الآن بفحص الأسعار ومزودي الحجز لرحلتك.',
-        subtitle: 'تظهر النتائج داخل موقع ريدستار، ويمكن تحويلها إلى بيانات Wego الحية عند إضافة مفتاح الواجهة البرمجية.',
+        subtitle: 'تظهر النتائج داخل موقع ريدستار. نتائج Duffel التجريبية مخصصة لاختبار الربط فقط.',
         loading: 'جارٍ تحميل النتائج...',
         searchSummary: 'ملخص البحث',
         sourceLive: 'المصدر: نتائج Wego الحية',
+        sourceDuffelTest: 'المصدر: نتائج Duffel التجريبية',
         sourceMock: 'المصدر: نتائج تجريبية إلى حين إضافة بيانات الربط',
         sourceFallback: 'المصدر: نتائج بديلة لأن البحث الحي أعاد خطأ',
         localFallbackNote: 'هذه الخيارات معروضة محليًا لأن واجهة الرحلات الحية غير متاحة على الخادم الحالي.',
@@ -299,7 +301,13 @@ function renderResults(payload, query) {
     summary.innerHTML = formatSearchSummary(query, t);
     grid.innerHTML = '';
 
-    const sourceText = payload.source === 'wego_live' ? t.sourceLive : payload.source === 'mock' ? t.sourceMock : t.sourceFallback;
+    const sourceText = payload.source === 'duffel_test'
+        ? t.sourceDuffelTest
+        : payload.source === 'wego_live' || payload.source === 'aviationstack_live'
+            ? t.sourceLive
+            : payload.source === 'mock'
+                ? t.sourceMock
+                : t.sourceFallback;
     status.innerHTML = `<strong>${sourceText}</strong>${payload.note ? `<p style="margin-top: 10px; color: var(--muted);">${payload.note}</p>` : ''}`;
 
     const trips = payload.trips || [];
@@ -363,7 +371,23 @@ async function initResultsPage() {
         return;
     }
 
-    renderResults(buildClientFallbackResults(query, t), query);
+    try {
+        const url = new URL('https://redstar-duffel-search.redstarfortravel.workers.dev/api/flights/search');
+        Object.entries(query).forEach(([key, value]) => {
+            if (value !== '') url.searchParams.set(key, String(value));
+        });
+        const response = await fetch(url.toString(), { headers: { Accept: 'application/json' } });
+        const payload = await response.json();
+        if (!response.ok) {
+            throw new Error(payload.error || 'The flight search service returned an error.');
+        }
+        renderResults(payload, query);
+    } catch (error) {
+        const fallback = buildClientFallbackResults(query, t);
+        fallback.source = 'fallback';
+        fallback.note = `${t.localFallbackNote} ${error.message}`;
+        renderResults(fallback, query);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
