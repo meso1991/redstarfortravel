@@ -277,7 +277,14 @@ function sendFile(res, filePath) {
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || "application/octet-stream";
     const stream = fs.createReadStream(filePath);
-    res.writeHead(200, { "Content-Type": contentType });
+    const cacheControl = [".html", ".json", ".webmanifest"].includes(ext)
+        ? "no-cache"
+        : [".css", ".js"].includes(ext)
+            ? "public, max-age=86400"
+            : [".webp", ".svg", ".png", ".jpg", ".jpeg", ".ico"].includes(ext)
+                ? "public, max-age=2592000, immutable"
+                : "public, max-age=3600";
+    res.writeHead(200, { "Content-Type": contentType, "Cache-Control": cacheControl });
     stream.pipe(res);
     stream.on("error", () => {
         res.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" });
