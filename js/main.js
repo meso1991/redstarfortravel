@@ -1,5 +1,4 @@
 const REDSTAR_WHATSAPP = "201555988432";
-const REVIEW_STORAGE_KEY = "redstar_reviews";
 const VISA_SERVICES = {
     saudi: [{ value: "family_visit_cairo", ar: "👨‍👩‍👧 زيارة عائلية - القاهرة", en: "👨‍👩‍👧 Family Visit - Cairo" }, { value: "family_visit_khartoum", ar: "👨‍👩‍👧 زيارة عائلية - الخرطوم", en: "👨‍👩‍👧 Family Visit - Khartoum" }, { value: "tourist_gcc", ar: "🏖️ تأشيرة سياحية - مقيمو الخليج", en: "🏖️ Tourist Visa - GCC Residents" }, { value: "residence", ar: "🏠 إقامة", en: "🏠 Residence" }, { value: "umrah", ar: "🕋 عمرة", en: "🕋 Umrah" }],
     egypt: [{ value: "security_approval", ar: "🛡️ موافقة أمنية", en: "🛡️ Security Approval" }, { value: "visa", ar: "🛂 تأشيرة", en: "🛂 Visa" }],
@@ -1274,100 +1273,6 @@ function startDestinationSlideshows() {
     images.forEach((image) => observer.observe(image));
 }
 
-function getStoredReviews() {
-    try {
-        const raw = localStorage.getItem(REVIEW_STORAGE_KEY);
-        const parsed = raw ? JSON.parse(raw) : [];
-        return Array.isArray(parsed) ? parsed : [];
-    } catch (error) {
-        return [];
-    }
-}
-
-function saveStoredReviews(reviews) {
-    try {
-        localStorage.setItem(REVIEW_STORAGE_KEY, JSON.stringify(reviews));
-    } catch (error) {
-        // Ignore storage errors in private browsing or restricted environments.
-    }
-}
-
-function renderReviews(reviews) {
-    const reviewsList = document.getElementById("reviews-list");
-    if (!reviewsList) {
-        return;
-    }
-
-    if (!reviews.length) {
-        reviewsList.innerHTML = '<p class="review-empty">لا توجد تقييمات بعد. كن أول من يكتب رأيك.</p>';
-        return;
-    }
-
-    reviewsList.innerHTML = reviews.map((review) => {
-        const safeName = (review.name || "ضيف").replace(/[<>]/g, "");
-        const safeComment = (review.comment || "").replace(/[<>]/g, "");
-        const stars = "★".repeat(Number(review.rating || 5));
-        return `
-            <article class="review-item">
-                <div class="review-header">
-                    <strong>${safeName}</strong>
-                    <span class="review-stars">${stars}</span>
-                </div>
-                <p>${safeComment}</p>
-            </article>
-        `;
-    }).join("");
-}
-
-async function loadReviews() {
-    const reviews = getStoredReviews();
-    renderReviews(reviews);
-}
-
-async function submitReview(event) {
-    event.preventDefault();
-
-    const form = event.currentTarget;
-    const nameInput = document.getElementById("review-name");
-    const ratingInput = document.getElementById("review-rating");
-    const commentInput = document.getElementById("review-comment");
-    const statusElement = document.getElementById("review-status");
-
-    if (!form || !nameInput || !ratingInput || !commentInput || !statusElement) {
-        return;
-    }
-
-    const payload = {
-        name: nameInput.value.trim(),
-        rating: Number(ratingInput.value),
-        comment: commentInput.value.trim()
-    };
-
-    if (!payload.comment || !Number.isInteger(payload.rating) || payload.rating < 1 || payload.rating > 5) {
-        statusElement.textContent = "يرجى كتابة رأيك واختيار تقييم من 1 إلى 5.";
-        return;
-    }
-
-    statusElement.textContent = "جاري إرسال التقييم...";
-
-    try {
-        const reviews = getStoredReviews();
-        const nextReviews = [{
-            name: payload.name || "ضيف",
-            rating: payload.rating,
-            comment: payload.comment,
-            date: new Date().toISOString()
-        }, ...reviews].slice(0, 20);
-
-        saveStoredReviews(nextReviews);
-        form.reset();
-        renderReviews(nextReviews);
-        statusElement.textContent = "تم إرسال التقييم بنجاح.";
-    } catch (error) {
-        statusElement.textContent = "تعذر إرسال التقييم الآن. حاول مرة أخرى.";
-    }
-}
-
 document.addEventListener("DOMContentLoaded", () => {
     const currentYearElem = document.querySelector("[data-current-year]");
     if (currentYearElem) currentYearElem.textContent = new Date().getFullYear();
@@ -1382,12 +1287,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    const reviewForm = document.getElementById("review-form");
-    if (reviewForm) {
-        reviewForm.addEventListener("submit", submitReview);
-    }
-
-    loadReviews();
     startDestinationSlideshows();
     removeDeletedPageLinks();
     setupVisaWizard();
